@@ -30,6 +30,16 @@ Retrieve current Cloudflare docs, Cloudflare API schemas, and source-vendor expo
 - Palo Alto rules map only after understanding traffic direction, zones, objects, users, apps, decryption, and hit counts. Do not flatten zones blindly into lists.
 - Legacy VPN replacement is usually Access + WARP + Tunnel for app access. Use Magic WAN/site connectivity only when site-to-site traffic is required.
 
+## Migration Assessment Prompts
+
+- Source coverage: which products are in scope, which exports are available, and whether screenshots/prose summaries are hiding missing object files.
+- Rule volume and hit data: counts by rule type, disabled/stale rules, no-hit rules, high-hit rules, and business-critical exceptions.
+- Object dependencies: address objects, service objects, groups, custom categories, network services, app IDs, zones, tags, connectors, and server groups.
+- Identity readiness: IdP, SCIM/group sync, group-name normalization, individual-user rules, local groups, service accounts, and contractor identities.
+- TLS/DLP readiness: source decryption rules, certificate-pinned bypasses, DLP engines, custom regex, exact-match data, and payload logging expectations.
+- Connectivity readiness: source tunnels/connectors, private DNS, split tunnel/bypass behavior, source IP preservation, egress IP allowlists, and site-to-site requirements.
+- Rollout readiness: pilot groups/sites, parallel-run period, rollback owner, source-stack decommission criteria, and monitoring/log comparison plan.
+
 ## Source-Specific Traps
 
 ### Zscaler ZIA / SWG
@@ -75,6 +85,7 @@ Retrieve current Cloudflare docs, Cloudflare API schemas, and source-vendor expo
 - Validate group matching with real pilot users after SCIM sync and re-authentication.
 - Test TLS inspection and Do Not Inspect behavior before enabling HTTP/DLP blocks broadly.
 - Keep rollback paths explicit: disable migrated rules by prefix, restore source routing, or revert the pilot group/site.
+- Before declaring done, produce a source-rule accounting table: migrated object, partial mapping, not migrated reason, security impact, and owner for each manual action.
 
 ## Assessment Template
 
