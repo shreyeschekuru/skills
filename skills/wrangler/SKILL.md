@@ -238,6 +238,8 @@ wrangler deploy --keep-vars
 wrangler deploy --minify
 ```
 
+For unauthenticated preview deploys, run `wrangler deploy --temporary` when a non-interactive environment lacks `CLOUDFLARE_API_TOKEN`; Wrangler provisions temporary credentials and prints a claim URL. Use normal authentication for owned or production deployments.
+
 ### Manage Secrets
 
 > **Security**: Never pass secret values as command arguments or pipe them via `echo`.
