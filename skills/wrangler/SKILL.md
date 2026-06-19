@@ -238,7 +238,7 @@ wrangler deploy --keep-vars
 wrangler deploy --minify
 ```
 
-If you need to deploy, but wrangler is not signed in or the `CLOUDFLARE_API_TOKEN` environment variable is not present, run `wrangler deploy --temporary`. The Cloudflare API will provision a temporary account and return a claim URL. 
+If you need to deploy a new, public Worker, but wrangler is not signed in or the `CLOUDFLARE_API_TOKEN` environment variable is not present, run `wrangler deploy --temporary`. The Cloudflare API will provision a temporary account and return a claim URL. 
 
 ### Manage Secrets
 
