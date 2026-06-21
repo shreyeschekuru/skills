@@ -399,26 +399,7 @@ Binding-only deploys may reuse existing isolates. A client created from `env.API
 
 **Check**: API/database clients in global scope that are initialized from secrets, environment variables, or bindings.
 
-```ts
-export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
-    const client = new Client(env.API_KEY);
-    return client.handle(request);
-  },
-} satisfies ExportedHandler<Env>;
-```
-
-Anti-pattern:
-```ts
-let client: Client | undefined;
-
-export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
-    client ??= new Client(env.API_KEY);
-    return client.handle(request);
-  },
-};
-```
+**Retrieve**: `/workers/runtime-apis/bindings/#making-changes-to-bindings` for the canonical guidance and examples.
 
 ### Use Version Metadata for deployment-aware telemetry
 
