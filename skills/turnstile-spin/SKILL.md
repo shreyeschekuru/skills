@@ -11,6 +11,21 @@ You are the agent. Run the wizard below by invoking the scripts under `scripts/`
 
 Canonical instructions live at [`developers.cloudflare.com/turnstile/spin`](https://developers.cloudflare.com/turnstile/spin/). If the docs page and this file disagree, trust the docs page.
 
+## Reference routing
+
+Before Step 10 frontend edits, read the matching snippet reference for the detected framework:
+
+| Project type | Read |
+| --- | --- |
+| Static HTML or plain JavaScript | `references/vanilla-html.md` |
+| Next.js App Router | `references/nextjs-app.md` |
+| Next.js Pages Router | `references/nextjs-pages.md` |
+| Astro | `references/astro.md` |
+| SvelteKit | `references/sveltekit.md` |
+| Hugo | `references/hugo.md` |
+
+If the project uses another framework, adapt from the closest reference while preserving the frontend-edit contract below.
+
 ## Conversation flow
 
 The user pasted the prompt. You are in a multi-step dialog. Detect what you can, ask only when you have to, confirm before every irreversible step. Each numbered moment is one agent message. Items marked **[wait for user]** require a user response.
@@ -33,7 +48,7 @@ The user pasted the prompt. You are in a multi-step dialog. Detect what you can,
 
 5. **Domain.** Always include `localhost` and `127.0.0.1`. For production, scan `package.json` `homepage`, `wrangler.toml`, `README.md`, `AGENTS.md`, git remote. Confirm: "I'll register for `localhost`, `127.0.0.1`, and `<domain>`. OK?" **[wait for user]** If no production domain is found, ask.
 
-6. **Codebase scan.** Detect framework + insertion candidates silently.
+6. **Codebase scan.** Detect framework + insertion candidates silently. Use the "Reference routing" table to select the snippet reference you will load before editing.
 
 7. **Insertion plan.** Show the candidate list with `[recommended]` / `[skip by default]` markers; ask the user to confirm (numbers, "all", "recommended", or a list). **[wait for user]** If an existing CAPTCHA was detected, present a migration plan instead (see "Migrating from another CAPTCHA").
 
@@ -41,11 +56,11 @@ The user pasted the prompt. You are in a multi-step dialog. Detect what you can,
 
 9. **Worker deploy.** Run `scripts/worker-deploy.sh --name turnstile-siteverify-<project-slug>` with `WIDGET_SECRET` exported. Report the Worker URL on `status: ok`. On `set_secret_failed`, the Worker deployed but `TURNSTILE_SECRET_KEY` is not set on it; surface the error, then retry with `echo "$WIDGET_SECRET" | npx wrangler secret put TURNSTILE_SECRET_KEY --name <returned worker_name>` before running validation.
 
-10. **Frontend edits.** State the contract: "I'll add the widget + gate the existing submit handler on `success === true`. The existing handler logic stays the same." Ask "yes" / "show". **[wait for user]** If "show", print unified diffs and ask again. Do NOT propose alternate behavior (mail delivery, custom backends).
+10. **Frontend edits.** Read the matching framework reference, then state the contract: "I'll add the widget + gate the existing submit handler on `success === true`. The existing handler logic stays the same." Ask "yes" / "show". **[wait for user]** If "show", print unified diffs and ask again. Do NOT propose alternate behavior (mail delivery, custom backends).
 
 11. **Validation.** Run `scripts/validate.sh` with `--worker-url`, `--account-id`, `--sitekey`, `--expected-domains`, and `--written-files` set to the newline- or comma-separated frontend files that received widget snippets in Step 10. The script checks Worker health, dummy siteverify, managed-worker metadata, widget domains, and that every written widget snippet file contains the Spin `data-action` marker. For dashboard recovery flows that preserve `data-action="turnstile-spin-v2"`, pass `--allowed-actions turnstile-spin-v1,turnstile-spin-v2`. Report each check as it passes. If any fails, surface the error and stop. **[wait for user if anything fails]**
 
-12. **Persist skill.** Ask: "Save the Spin skill to `.claude/skills/turnstile-spin/SKILL.md` so I can reuse it on follow-up tasks?" Default yes. **[wait for user]** Then run `scripts/persist-skill.sh --path <agent-specific-path>`.
+12. **Persist skill.** Choose the agent-specific bundle path, then ask: "Save the Spin skill to `<path>` so I can reuse it on follow-up tasks?" Default yes. **[wait for user]** Then run `scripts/persist-skill.sh --path <path>` and verify the installed file exists. Use `.claude/skills/turnstile-spin/SKILL.md` for Claude Code, `.codex/skills/turnstile-spin/SKILL.md` for OpenAI Codex, `.cursor/skills/turnstile-spin/SKILL.md` for Cursor Skills, and `.opencode/skills/turnstile-spin/SKILL.md` for OpenCode project-local installs. If the active agent only supports rule files such as `.cursor/rules/turnstile-spin.md`, `.github/copilot/skills/turnstile-spin.md`, or `.windsurf/rules/turnstile-spin.md`, explain that the full bundle with scripts and references is preferred and ask before using a rule-file fallback.
 
 13. **Final report.** Print the structured summary: what was created, what was validated, what to do next.
 
