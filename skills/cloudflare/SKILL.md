@@ -1,6 +1,6 @@
 ---
 name: cloudflare
-description: Route Cloudflare platform development tasks to current docs, MCP tools, and focused Cloudflare skills. Use for broad or ambiguous Cloudflare work across Workers, Pages, storage, AI, browser automation, dynamic Workers, Workflows, networking, security, analytics, media, feature flags, bindings, or infrastructure-as-code; prefer narrower Cloudflare skills when the task clearly matches them.
+description: Route Cloudflare platform development tasks to current docs, MCP tools, and focused Cloudflare skills. Use for broad or ambiguous Cloudflare work across Workers, Pages, storage, AI, browser automation, dynamic Workers, Workflows, zone/core configuration, SaaS platforms, networking, security, analytics, media, feature flags, bindings, or infrastructure-as-code; prefer narrower Cloudflare skills when the task clearly matches them.
 ---
 
 # Cloudflare Platform
@@ -14,9 +14,10 @@ Retrieve current Cloudflare information before relying on exact API fields, CLI 
 Prefer sources in this order:
 
 1. Cloudflare MCP/docs tools when available.
-2. The relevant product documentation page under `https://developers.cloudflare.com/`.
-3. Project-local source of truth: `wrangler.jsonc`, generated `worker-configuration.d.ts`, `node_modules/wrangler/config-schema.json`, package versions, tests, and deployed configuration inspected through Wrangler or the Cloudflare API.
-4. Last resort: the Cloudflare Workers SDK repository (`https://github.com/cloudflare/workers-sdk`) for reverse-engineering Wrangler or Miniflare behavior when the sources above do not answer the question.
+2. Cloudflare docs indexes for discovery only: `https://developers.cloudflare.com/llms.txt` or the relevant product `llms.txt`.
+3. The relevant product documentation page under `https://developers.cloudflare.com/`. Prefer Markdown docs (`index.md` or `Accept: text/markdown`) over HTML when fetching directly.
+4. Project-local source of truth: `wrangler.jsonc`, generated `worker-configuration.d.ts`, `node_modules/wrangler/config-schema.json`, package versions, tests, and deployed configuration inspected through Wrangler or the Cloudflare API.
+5. Last resort: the Cloudflare Workers SDK repository (`https://github.com/cloudflare/workers-sdk`) for reverse-engineering Wrangler or Miniflare behavior when the sources above do not answer the question.
 
 When retrieved docs and local skill guidance disagree, trust the retrieved docs and generated/project-local types.
 
@@ -36,6 +37,7 @@ When retrieved docs and local skill guidance disagree, trust the retrieved docs 
 
 | Need | Start with | Current docs |
 | --- | --- | --- |
+| Broad architecture or product fit across several Cloudflare services | Reference Architecture docs plus product docs | `https://developers.cloudflare.com/reference-architecture/` |
 | Workers runtime, bindings, static assets, cron, tail Workers | Workers, `workers-best-practices`, `wrangler` | `https://developers.cloudflare.com/workers/` |
 | CLI commands, deployment, resource creation, generated types | `wrangler` | `https://developers.cloudflare.com/workers/wrangler/` |
 | Real browser automation, screenshots, PDFs, crawlers, CDP, Playwright, Puppeteer, WebMCP | `browser-run` | `https://developers.cloudflare.com/browser-run/` |
@@ -48,9 +50,17 @@ When retrieved docs and local skill guidance disagree, trust the retrieved docs 
 | Transactional email sending or routing | `cloudflare-email-service` | `https://developers.cloudflare.com/email-service/` |
 | Turnstile setup or CAPTCHA migration | `turnstile-spin` | `https://developers.cloudflare.com/turnstile/` |
 | Feature flags, targeting, gradual rollouts | `flagship` | `https://developers.cloudflare.com/flagship/` |
+| Zone onboarding, DNS records, nameservers, DNSSEC, internal DNS, private origins | DNS docs plus Cloudflare API/Terraform docs | `https://developers.cloudflare.com/dns/` |
+| TLS certificates, modes, mTLS, keyless SSL, custom hostname certificates | SSL/TLS docs plus product docs for SaaS or API Shield | `https://developers.cloudflare.com/ssl/` |
+| Redirects, URL/header transforms, origin rules, cache rules, compression rules, custom errors, request tracing | Rules and Ruleset Engine docs | `https://developers.cloudflare.com/rules/`, `https://developers.cloudflare.com/ruleset-engine/` |
+| CDN cache behavior, cache rules, cache keys, cache security, Cache Reserve | Cache docs plus `platform-gotchas.md` | `https://developers.cloudflare.com/cache/` |
+| Origin availability, health monitoring, global/local traffic steering, failover | Load Balancing, Health Checks, and Reference Architecture docs | `https://developers.cloudflare.com/load-balancing/`, `https://developers.cloudflare.com/health-checks/`, `https://developers.cloudflare.com/reference-architecture/architectures/load-balancing/` |
+| Planned traffic surges, queues for visitors, event-based capacity control | Waiting Room docs | `https://developers.cloudflare.com/waiting-room/` |
+| Versioned/staged zone configuration changes and rollbacks | Version Management docs | `https://developers.cloudflare.com/version-management/` |
+| Resource organization, tags, ownership, billing attribution | Resource Tagging docs plus API/Terraform docs | `https://developers.cloudflare.com/resource-tagging/` |
+| Multi-tenant SaaS platforms, customer custom hostnames, customer-uploaded code, tenant provisioning, OAuth integrations | Cloudflare for Platforms, Tenant, OAuth, and Reference Architecture docs | `https://developers.cloudflare.com/cloudflare-for-platforms/`, `https://developers.cloudflare.com/tenant/`, `https://developers.cloudflare.com/fundamentals/oauth/`, `https://developers.cloudflare.com/reference-architecture/design-guides/leveraging-cloudflare-for-your-saas-applications/` |
 | KV, D1, R2, Queues, Vectorize, Hyperdrive | Product docs plus `wrangler` | `https://developers.cloudflare.com/` |
 | R2 Data Catalog, R2 SQL, Pipelines, lakehouse analytics | Product docs plus `platform-gotchas.md` | `https://developers.cloudflare.com/r2-sql/`, `https://developers.cloudflare.com/pipelines/`, `https://developers.cloudflare.com/r2/data-catalog/` |
-| Cache Reserve and CDN cache behavior | Cache docs plus `platform-gotchas.md` | `https://developers.cloudflare.com/cache/` |
 | Artifacts and Agent Memory | Product docs plus `wrangler` and `platform-gotchas.md` | `https://developers.cloudflare.com/artifacts/`, `https://developers.cloudflare.com/agent-memory/` |
 | Images, Stream, Media Transformations | Product docs plus `platform-gotchas.md` | `https://developers.cloudflare.com/images/`, `https://developers.cloudflare.com/stream/`, `https://developers.cloudflare.com/stream/transform-videos/` |
 | Rate Limiting, mTLS, Version Metadata, Secrets Store | Workers binding docs plus `wrangler` and `platform-gotchas.md` | `https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/`, `https://developers.cloudflare.com/workers/runtime-apis/bindings/mtls/`, `https://developers.cloudflare.com/workers/runtime-apis/bindings/version-metadata/`, `https://developers.cloudflare.com/secrets-store/` |
@@ -60,7 +70,11 @@ When retrieved docs and local skill guidance disagree, trust the retrieved docs 
 | Tunnel, Magic WAN, WARP, Access, Gateway, DLP, CASB | `cloudflare-one` | `https://developers.cloudflare.com/cloudflare-one/` |
 | Realtime audio/video, SFU, TURN, RealtimeKit | Realtime docs plus `platform-gotchas.md` | `https://developers.cloudflare.com/realtime/` |
 | Private Worker access to internal HTTP/TCP services | Workers VPC docs plus product chooser | `https://developers.cloudflare.com/workers-vpc/` |
-| WAF, DDoS, Bot Management, API Shield | Product docs and Cloudflare API schema | `https://developers.cloudflare.com/` |
+| WAF managed/custom/rate limiting rules, account-level rules, exceptions, false positive tuning | WAF, Ruleset Engine, and WAF reference architecture docs | `https://developers.cloudflare.com/waf/`, `https://developers.cloudflare.com/ruleset-engine/`, `https://developers.cloudflare.com/reference-architecture/design-guides/streamlined-waf-deployment-across-zones-and-applications/` |
+| Bot traffic, scraping, AI crawlers, bot scores, signed/verified bots | Bots docs plus WAF custom rules where enforcement uses rules | `https://developers.cloudflare.com/bots/`, `https://developers.cloudflare.com/waf/` |
+| API discovery, schema/JWT/mTLS validation, sequence abuse, API routing | API Shield docs | `https://developers.cloudflare.com/api-shield/` |
+| Client-side script/resource security, CSP monitoring, malicious script detection | Client-side security docs | `https://developers.cloudflare.com/client-side-security/` |
+| Challenge pages, JavaScript detections, clearance cookies, challenge loops | Challenges docs plus Turnstile docs for embedded verification | `https://developers.cloudflare.com/cloudflare-challenges/`, `https://developers.cloudflare.com/turnstile/` |
 | Terraform or Pulumi | Provider docs plus Cloudflare API schema | `https://developers.cloudflare.com/terraform/` |
 | Worker logs, traces, metrics, Query Builder | Workers observability docs | `https://developers.cloudflare.com/workers/observability/` |
 | Account/zone logs, forensic log search | Logs and Log Explorer docs | `https://developers.cloudflare.com/logs/`, `https://developers.cloudflare.com/log-explorer/` |

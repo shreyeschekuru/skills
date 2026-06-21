@@ -133,6 +133,7 @@ Before implementing or debugging a product without a focused skill:
 
 - Retrieve current Cache Reserve and cache rule docs before configuring eligibility, purges, or billing-sensitive behavior: `https://developers.cloudflare.com/cache/`.
 - Use Cache Reserve for persistent CDN cache of cacheable origin responses, not as application object storage.
+- Treat Cache Reserve as zone-level automatic cache storage. Workers Cache API calls such as `caches.default`, `caches.open()`, and `cache.put()` only affect Workers edge/custom caches; they do not selectively write into Cache Reserve or Tiered Cache. Use normal `fetch()`, cache rules, and eligible origin responses for Cache Reserve behavior.
 - Check cacheability inputs before debugging misses: cache rules, response headers, content length, cookies, `Vary`, range requests, R2 public buckets, and Orange-to-Orange paths.
 - Treat purge and clear-data behavior as product-specific. Retrieve docs before promising immediate removal from persistent cache.
 
@@ -278,6 +279,27 @@ Before implementing or debugging a product without a focused skill:
 
 ## Networking And Security
 
+### Zone Core Operations
+
+- Retrieve the product docs before changing zone-level behavior. DNS, SSL/TLS, Rules, Cache, Load Balancing, Health Checks, Waiting Room, WAF, Bots, and API Shield have separate evaluation models, plan gates, and API/Terraform resource shapes.
+- Prefer Cloudflare Rules products for redirects, header transforms, origin overrides, cache rules, compression, and custom errors when they can express the behavior. Use Workers when the request path needs application logic, custom state, external calls, or code-level branching.
+- Use Ruleset Engine docs for expression language, phases, account-vs-zone rulesets, managed ruleset overrides, and API shapes. Do not guess phases, field names, or skip/exception semantics.
+- For multi-zone WAF or shared security baselines, retrieve the streamlined WAF reference architecture. Avoid mixing account-level and zone-level ownership without a clear exception model.
+- For traffic steering and failover, distinguish DNS/Load Balancing/Health Checks from application-level routing. Load Balancing changes traffic flow; Health Checks alone only monitor and notify.
+- Waiting Room controls visitor admission during capacity events; it is not origin selection, DDoS mitigation, or a task queue.
+- Version Management can stage and roll back supported zone configuration. Retrieve supported configuration docs before promising that a setting can be versioned.
+- Resource tags are management metadata for organization, access control, and billing attribution. Do not rely on tags for request-time logic unless a specific product doc says they participate in evaluation.
+
+### Cloudflare For Platforms And SaaS
+
+- Use Cloudflare for SaaS for customer custom hostnames on a SaaS provider's zone. Use Workers for Platforms when customers upload or generate code that runs as user Workers. Use Tenant APIs for partner-style account and subscription provisioning.
+- Workers for Platforms centers on dispatch namespaces, a dynamic dispatch Worker, user Workers, and optional outbound Workers. Do not create a namespace per customer unless current docs justify it; use tags, metadata, and app data for customer organization.
+- The dynamic dispatch Worker is the platform control point for routing, auth, plan limits, response shaping, and calls to internal service bindings.
+- User Workers are isolated by default and may need explicitly configured bindings, compatibility settings, limits, static assets, and observability. Generate or validate metadata against current upload docs before deploying user code.
+- Use outbound Workers or Dynamic Workers egress controls for untrusted customer/AI-generated code that makes external requests. Do not pass raw platform secrets into user Workers.
+- Cloudflare for SaaS custom hostnames have separate ownership validation, certificate issuance, security, WAF, analytics, and product compatibility docs. Retrieve the Cloudflare for SaaS docs before automating custom hostname lifecycle.
+- For OAuth integrations, retrieve current Cloudflare OAuth docs and API scopes. Do not ask users for broad API tokens when an installable OAuth flow is the right product shape.
+
 ### Tunnel, Spectrum, And Private Connectivity
 
 - Use Tunnel/Cloudflare One for private HTTP app exposure and Zero Trust access.
@@ -316,6 +338,9 @@ Before implementing or debugging a product without a focused skill:
 
 - Stage risky rules in log/simulate or narrow scopes before blocking production traffic.
 - Schema and JWT validation failures are often configuration mismatch, not attacker traffic.
+- For API Shield schema validation migrations, check for lingering Classic Schema Validation rules before blaming the uploaded OpenAPI schema. Retrieve current docs for Schema Validation 2.0, supported OpenAPI versions, external-reference support, and body-inspection limits.
+- For BOLA, sequence mitigation, API discovery, and risk labels, verify unique session identifiers and current minimum traffic/training requirements before expecting detections or blocking behavior.
+- For Bot Management JavaScript Detections, check lifecycle and browser prerequisites: CSP must allow `/cdn-cgi/challenge-platform/`, first HTML-page visits may not have JSD data yet, ad blockers or disabled JavaScript can prevent a pass signal, and Managed Challenge behavior differs from a plain Block rule.
 - API discovery and ML-driven features may need enough representative traffic before conclusions are reliable.
 - Keep bypasses and exceptions documented with owner, reason, and expiry.
 
