@@ -16,6 +16,7 @@ Prefer sources in this order:
 1. Cloudflare MCP/docs tools when available.
 2. The relevant product documentation page under `https://developers.cloudflare.com/`.
 3. Project-local source of truth: `wrangler.jsonc`, generated `worker-configuration.d.ts`, `node_modules/wrangler/config-schema.json`, package versions, tests, and deployed configuration inspected through Wrangler or the Cloudflare API.
+4. Last resort: the Cloudflare Workers SDK repository (`https://github.com/cloudflare/workers-sdk`) for reverse-engineering Wrangler or Miniflare behavior when the sources above do not answer the question.
 
 When retrieved docs and local skill guidance disagree, trust the retrieved docs and generated/project-local types.
 
