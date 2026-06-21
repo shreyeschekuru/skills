@@ -1,6 +1,16 @@
 # Think (Experimental)
 
-Fetch https://developers.cloudflare.com/agents/api-reference/think/ for complete documentation.
+## Contents
+- Minimal Agent
+- Wrangler Config
+- Custom Tools
+- Lifecycle Hooks
+- Sub-Agents
+- Client
+- Think vs AIChatAgent
+
+
+Fetch https://developers.cloudflare.com/agents/harnesses/think/ for complete documentation.
 
 `@cloudflare/think` — a higher-level chat agent class that handles the `streamText` loop, tool execution, and message persistence for you. You provide `getModel()` and `getSystemPrompt()`; Think handles the rest.
 

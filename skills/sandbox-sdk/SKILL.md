@@ -1,6 +1,6 @@
 ---
 name: sandbox-sdk
-description: Build sandboxed applications for secure code execution. Load when building AI code execution, code interpreters, CI/CD systems, interactive dev environments, or executing untrusted code. Covers Sandbox SDK lifecycle, commands, files, code interpreter, and preview URLs. Biases towards retrieval from Cloudflare docs over pre-trained knowledge.
+description: Build sandboxed applications for secure code execution on Cloudflare. Load for AI code execution, code interpreters, CI/CD sandboxes, interactive dev environments, untrusted code, Sandbox SDK lifecycle, commands, files, preview URLs, or Dockerfile configuration. Retrieve current docs before exact APIs.
 ---
 
 # Cloudflare Sandbox SDK
@@ -102,7 +102,7 @@ const file = await sandbox.readFile('/workspace/project/main.py');
 const files = await sandbox.listFiles('/workspace/project');
 ```
 
-## When to Use What
+## API Choices
 
 | Need | Use | Why |
 |------|-----|-----|

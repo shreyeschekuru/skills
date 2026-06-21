@@ -1,6 +1,18 @@
 # MCP Integration
 
-Fetch https://developers.cloudflare.com/agents/api-reference/mcp-client-api/ and https://developers.cloudflare.com/agents/api-reference/mcp-agent-api/ for complete documentation.
+## Contents
+- Add an MCP Server
+- Use MCP Tools
+- List MCP Resources
+- Remove Server
+- Building an MCP Server
+- Serve MCP Server
+- Transports
+- Retry on MCP Connections
+- Securing MCP Servers
+
+
+Fetch https://developers.cloudflare.com/agents/model-context-protocol/apis/client-api/ and https://developers.cloudflare.com/agents/model-context-protocol/apis/agent-api/ for complete documentation.
 
 Agents include a multi-server MCP client for connecting to external MCP servers, and `McpAgent` for building MCP servers.
 
@@ -34,7 +46,7 @@ export class MyAgent extends Agent<Env, State> {
 async onChatMessage() {
   // Get AI-compatible tools from all connected MCP servers
   const mcpTools = this.mcp.getAITools();
-  
+
   const allTools = {
     ...localTools,
     ...mcpTools
@@ -45,7 +57,7 @@ async onChatMessage() {
     messages: await convertToModelMessages(this.messages),
     tools: allTools
   });
-  
+
   return result.toUIMessageStreamResponse();
 }
 ```
@@ -155,7 +167,7 @@ export default {
 
 ## Transports
 
-Fetch https://developers.cloudflare.com/agents/api-reference/mcp-transports/ for complete documentation.
+Fetch https://developers.cloudflare.com/agents/model-context-protocol/protocol/transport/ for complete documentation.
 
 | Transport | Use for |
 |-----------|---------|
@@ -183,6 +195,6 @@ await this.addMcpServer("tools", url, {
 
 ## Securing MCP Servers
 
-Fetch https://developers.cloudflare.com/agents/api-reference/securing-mcp-servers/ for complete documentation.
+Fetch https://developers.cloudflare.com/agents/model-context-protocol/guides/securing-mcp-server/ for complete documentation.
 
 Use `@cloudflare/workers-oauth-provider` to add OAuth in front of your MCP server. See the securing docs for proxy patterns and `redirect_uri` validation.

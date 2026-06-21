@@ -14,7 +14,7 @@ All examples: https://github.com/cloudflare/sandbox-sdk/tree/main/examples
 | `typescript-validator` | TypeScript compilation/validation | `src/index.ts` |
 | `authentication` | Auth patterns for sandboxes | `src/index.ts` |
 
-## When to Use Which Example
+## Choosing An Example
 
 | Building | Start With |
 |----------|------------|

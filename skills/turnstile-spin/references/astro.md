@@ -1,5 +1,11 @@
 # Astro
 
+## Contents
+- Variant: hardcoded values
+- Variant: Astro Actions
+- Substitutions
+
+
 For Astro projects. The form posts directly to the Worker. Astro frontmatter handles config substitution at build time.
 
 ```astro title="src/pages/signup.astro"

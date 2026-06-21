@@ -1,5 +1,14 @@
 # Code Review — Workers
 
+## Contents
+- Retrieval
+- Type Validation
+- Config Validation
+- Anti-Patterns to Flag
+- Serialization Boundaries
+- Review Process
+
+
 How to review Workers code for type correctness, API usage, config validity, and best practices. This is self-contained — do not assume access to other skills.
 
 ## Retrieval

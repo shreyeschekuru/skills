@@ -1,6 +1,18 @@
 # Streaming Chat with AIChatAgent
 
-Fetch https://developers.cloudflare.com/agents/api-reference/chat-agents/ for complete documentation.
+## Contents
+- Basic Chat Agent
+- With Tools
+- With Workers AI (no API keys)
+- Custom UI Message Stream
+- Resumable Streaming
+- React Client
+- Streaming RPC Methods
+- Key Properties
+- Status Values
+
+
+Fetch https://developers.cloudflare.com/agents/communication-channels/chat/chat-agents/ for complete documentation.
 
 `AIChatAgent` from `@cloudflare/ai-chat` provides streaming chat with automatic message persistence and resumable streams.
 
@@ -124,12 +136,12 @@ function ChatUI() {
     name: "my-chat-session"
   });
 
-  const { 
-    messages, 
-    input, 
-    handleInputChange, 
-    handleSubmit, 
-    status 
+  const {
+    messages,
+    input,
+    handleInputChange,
+    handleSubmit,
+    status
   } = useAgentChat({ agent });
 
   return (
@@ -139,10 +151,10 @@ function ChatUI() {
           <strong>{m.role}:</strong> {m.content}
         </div>
       ))}
-      
+
       <form onSubmit={handleSubmit}>
-        <input 
-          value={input} 
+        <input
+          value={input}
           onChange={handleInputChange}
           disabled={status === "streaming"}
         />

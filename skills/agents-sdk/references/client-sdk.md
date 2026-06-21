@@ -1,6 +1,14 @@
 # Client SDK
 
-Fetch https://developers.cloudflare.com/agents/api-reference/client-sdk/ for complete documentation.
+## Contents
+- React: `useAgent`
+- React: `useAgentChat`
+- Vanilla JS: `AgentClient`
+- `agentFetch` for HTTP-only
+- Streaming RPC
+
+
+Fetch https://developers.cloudflare.com/agents/communication-channels/chat/client-sdk/ for complete documentation.
 
 ## React: `useAgent`
 

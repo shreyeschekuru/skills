@@ -1,5 +1,15 @@
 # Durable Objects Rules & Best Practices
 
+## Contents
+- Design & Sharding
+- Storage
+- Concurrency
+- RPC Methods
+- Alarms
+- WebSockets (Hibernation API)
+- Error Handling
+
+
 ## Design & Sharding
 
 ### Model Around Coordination Atoms
@@ -234,11 +244,11 @@ async alarm(): Promise<void> {
   const tasks = this.ctx.storage.sql.exec<Task>(
     "SELECT * FROM tasks WHERE due_at <= ?", Date.now()
   ).toArray();
-  
+
   for (const task of tasks) {
     await this.processTask(task);
   }
-  
+
   // Reschedule if more work
   const next = this.ctx.storage.sql.exec<{ due_at: number }>(
     "SELECT MIN(due_at) as due_at FROM tasks WHERE due_at > ?", Date.now()

@@ -1,13 +1,6 @@
 ---
 name: turnstile-spin
-description: Set up Cloudflare Turnstile end-to-end in a project — scan the codebase, create the widget via the Cloudflare API, deploy the managed siteverify Worker, write the frontend snippets, validate, and persist the skill. Load this when a user asks to add Turnstile, set up CAPTCHA, protect a form from bots, or fix a Turnstile integration. Mirrors developers.cloudflare.com/turnstile/spin.
-references:
-  - vanilla-html
-  - nextjs-app
-  - nextjs-pages
-  - astro
-  - sveltekit
-  - hugo
+description: "Set up Cloudflare Turnstile end to end. Load to add Turnstile, set up CAPTCHA, protect a form from bots, migrate from reCAPTCHA or hCaptcha, fix siteverify, create the widget, deploy the managed siteverify Worker, write framework snippets, validate, or persist the skill."
 ---
 
 # Turnstile Spin skill
@@ -17,17 +10,6 @@ Turns the prompt "set up Turnstile" into a working end-to-end integration: a wid
 You are the agent. Run the wizard below by invoking the scripts under `scripts/` and branching on their JSON output. The scripts hold the deterministic logic (API calls, retry/error handling); your job is orchestration, codebase reading, confirmation, and the frontend edits.
 
 Canonical instructions live at [`developers.cloudflare.com/turnstile/spin`](https://developers.cloudflare.com/turnstile/spin/). If the docs page and this file disagree, trust the docs page.
-
-## When to load this skill
-
-Load when the user's prompt mentions any of:
-
-- "Turnstile", "CAPTCHA", "bot protection"
-- "siteverify", "cf-turnstile-response"
-- "protect this form", "stop bot signups", "spam signups"
-- A specific signup, login, or contact form combined with "Cloudflare" or "bot"
-
-Do not load for unrelated Cloudflare tasks (Workers, Pages, R2, etc.) unless Turnstile is also mentioned.
 
 ## Conversation flow
 

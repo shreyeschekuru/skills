@@ -54,14 +54,15 @@ Skills are contextual and auto-loaded based on your conversation. When a request
 
 | Skill | Useful for |
 |-------|------------|
-| cloudflare | Comprehensive platform skill covering Workers, Pages, storage (KV, D1, R2), AI (Workers AI, Vectorize, Agents SDK), networking (Tunnel, Spectrum), security (WAF, DDoS), and IaC (Terraform, Pulumi) |
+| cloudflare | Retrieval-first platform router for broad Cloudflare tasks, product selection, current docs, MCP tools, and focused skills |
 | agents-sdk | Building stateful AI agents with state, scheduling, RPC, MCP servers, email, and streaming chat |
+| cloudflare-email-service | Transactional email sending, Email Routing, Workers email bindings, REST email API, and deliverability |
 | durable-objects | Stateful coordination (chat rooms, games, booking), RPC, SQLite, alarms, WebSockets |
 | sandbox-sdk | Secure code execution for AI code execution, code interpreters, CI/CD systems, and interactive dev environments |
 | wrangler | Deploying and managing Workers, KV, R2, D1, Vectorize, Queues, Workflows |
 | web-perf | Auditing Core Web Vitals (FCP, LCP, TBT, CLS), render-blocking resources, network chains |
-| building-mcp-server-on-cloudflare | Building remote MCP servers with tools, OAuth, and deployment |
-| building-ai-agent-on-cloudflare | Building AI agents with state, WebSockets, and tool integration |
+| workers-best-practices | Reviewing and authoring production Workers code, bindings, generated types, streaming, secrets, and observability |
+| turnstile-spin | End-to-end Turnstile setup, CAPTCHA migration, managed siteverify Worker deployment, snippets, and validation |
 
 ## Cloudflare One
 
@@ -74,7 +75,7 @@ Short, retrieval-first skills for [Cloudflare One](https://developers.cloudflare
 
 ## MCP Servers
 
-This plugin includes [Cloudflare's remote MCP servers](https://developers.cloudflare.com/agents/model-context-protocol/mcp-servers-for-cloudflare/) for enhanced functionality:
+This plugin includes [Cloudflare's remote MCP servers](https://developers.cloudflare.com/agents/model-context-protocol/cloudflare/servers-for-cloudflare/) for enhanced functionality:
 
 | Server | Purpose |
 |--------|---------|

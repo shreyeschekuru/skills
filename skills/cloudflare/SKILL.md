@@ -1,245 +1,71 @@
 ---
 name: cloudflare
-description: Comprehensive Cloudflare platform skill covering Workers, Pages, storage (KV, D1, R2), AI (Workers AI, Vectorize, Agents SDK), feature flags (Flagship), networking (Tunnel, Spectrum), security (WAF, DDoS), and infrastructure-as-code (Terraform, Pulumi). Use for any Cloudflare development task. Biases towards retrieval from Cloudflare docs over pre-trained knowledge.
-references:
-  - workers
-  - pages
-  - d1
-  - durable-objects
-  - workers-ai
+description: Route Cloudflare platform development tasks to current docs, MCP tools, and focused Cloudflare skills. Use for broad or ambiguous Cloudflare work across Workers, Pages, storage, AI, networking, security, analytics, media, or infrastructure-as-code; prefer narrower Cloudflare skills when the task clearly matches them.
 ---
 
-# Cloudflare Platform Skill
+# Cloudflare Platform
 
-Consolidated skill for building on the Cloudflare platform. Use decision trees below to find the right product, then load detailed references.
+Use this skill as a routing and retrieval workflow for Cloudflare work. Do not treat it as a cached copy of the Cloudflare docs.
 
-Your knowledge of Cloudflare APIs, types, limits, and pricing may be outdated. **Prefer retrieval over pre-training** — the references in this skill are starting points, not source of truth.
+## Core Rule
 
-## Retrieval Sources
+Retrieve current Cloudflare information before relying on exact API fields, CLI flags, limits, pricing, compatibility dates, beta status, or configuration shapes.
 
-Fetch the **latest** information before citing specific numbers, API signatures, or configuration options. Do not rely on baked-in knowledge or these reference files alone.
+Prefer sources in this order:
 
-| Source | How to retrieve | Use for |
-|--------|----------------|---------|
-| Cloudflare docs | `cloudflare-docs` search tool or `https://developers.cloudflare.com/` | Limits, pricing, API reference, compatibility dates/flags |
-| Workers types | `npm pack @cloudflare/workers-types` or check `node_modules` | Type signatures, binding shapes, handler types |
-| Wrangler config schema | `node_modules/wrangler/config-schema.json` | Config fields, binding shapes, allowed values |
-| Product changelogs | `https://developers.cloudflare.com/changelog/` | Recent changes to limits, features, deprecations |
+1. Cloudflare MCP/docs tools when available.
+2. The relevant page under `https://developers.cloudflare.com/`.
+3. Project-local source of truth: `wrangler.jsonc`, generated `worker-configuration.d.ts`, `node_modules/wrangler/config-schema.json`, package versions, tests, and deployed configuration inspected through Wrangler or the Cloudflare API.
 
-When a reference file and the docs disagree, **trust the docs**. This is especially important for: numeric limits, pricing tiers, type signatures, and configuration options.
+When retrieved docs and local skill guidance disagree, trust the retrieved docs and generated/project-local types.
 
-## Quick Decision Trees
+## Workflow
 
-### "I need feature flags"
+1. Classify the task: build, review, debug, migrate, configure, deploy, observe, or plan.
+2. Prefer a focused skill when one matches: `wrangler`, `agents-sdk`, `durable-objects`, `workers-best-practices`, `sandbox-sdk`, `cloudflare-email-service`, `cloudflare-one`, `cloudflare-one-migrations`, `web-perf`, or `turnstile-spin`.
+3. For broad product choice, read `references/product-selection.md`.
+4. For products without a focused skill, or when debugging an implementation, read `references/platform-gotchas.md`.
+5. Retrieve only the current docs needed for the products involved.
+6. Inspect the project before changing it: package manager, framework, `wrangler.*`, generated types, bindings, compatibility date/flags, CI, tests, and deployment conventions.
+7. Make the smallest change that satisfies the user request.
+8. Validate with the closest project command: `npx wrangler types`, `npx wrangler deploy --dry-run`, `npm test`, `npx tsc --noEmit`, `npx vitest`, or product-specific validation.
+9. Report exact docs or local files used when the answer depends on current behavior.
 
-```
-Need feature flags?
-└─ Feature toggles, targeting rules, percentage rollouts → flagship/
-   ├─ Evaluate in Workers → Flagship binding (env.FLAGS)
-   ├─ Evaluate in Node.js / browser → OpenFeature SDK (@cloudflare/flagship)
-   └─ Manage flags via API → Flagship REST API
-```
+## Product Routing
 
-### "I need to run code"
+| Need | Start with | Current docs |
+| --- | --- | --- |
+| Workers runtime, bindings, static assets, cron, tail Workers | Workers, `workers-best-practices`, `wrangler` | `https://developers.cloudflare.com/workers/` |
+| CLI commands, deployment, resource creation, generated types | `wrangler` | `https://developers.cloudflare.com/workers/wrangler/` |
+| Full-stack web apps and Git deploys | Pages or Workers static assets | `https://developers.cloudflare.com/pages/`, `https://developers.cloudflare.com/workers/static-assets/` |
+| Stateful coordination, WebSockets, SQLite-per-object | `durable-objects` | `https://developers.cloudflare.com/durable-objects/` |
+| Stateful AI agents, RPC, scheduling, chat, MCP, voice | `agents-sdk` | `https://developers.cloudflare.com/agents/` |
+| Secure code execution and code interpreters | `sandbox-sdk` | `https://developers.cloudflare.com/sandbox/` |
+| Transactional email sending or routing | `cloudflare-email-service` | `https://developers.cloudflare.com/email-service/` |
+| Turnstile setup or CAPTCHA migration | `turnstile-spin` | `https://developers.cloudflare.com/turnstile/` |
+| KV, D1, R2, Queues, Vectorize, Hyperdrive | Product docs plus `wrangler` | `https://developers.cloudflare.com/` |
+| Workers AI model inference | Workers AI docs plus Workers bindings | `https://developers.cloudflare.com/workers-ai/` |
+| AI provider routing, caching, logs, fallback | AI Gateway docs | `https://developers.cloudflare.com/ai-gateway/` |
+| Managed RAG, semantic search, agent search endpoint | AI Search docs | `https://developers.cloudflare.com/ai-search/` |
+| Tunnel, Magic WAN, WARP, Access, Gateway, DLP, CASB | `cloudflare-one` | `https://developers.cloudflare.com/cloudflare-one/` |
+| WAF, DDoS, Bot Management, API Shield | Product docs and Cloudflare API schema | `https://developers.cloudflare.com/` |
+| Terraform or Pulumi | Provider docs plus Cloudflare API schema | `https://developers.cloudflare.com/terraform/` |
+| Worker logs, traces, metrics, Query Builder | Workers observability docs | `https://developers.cloudflare.com/workers/observability/` |
+| Account/zone logs, forensic log search | Logs and Log Explorer docs | `https://developers.cloudflare.com/logs/`, `https://developers.cloudflare.com/log-explorer/` |
+| GraphQL analytics, Web Analytics, custom Worker metrics | Analytics docs | `https://developers.cloudflare.com/analytics/` |
 
-```
-Need to run code?
-├─ Serverless functions at the edge → workers/
-├─ Full-stack web app with Git deploys → pages/
-├─ Stateful coordination/real-time → durable-objects/
-├─ Long-running multi-step jobs → workflows/
-├─ Run containers → containers/
-├─ Multi-tenant (customers deploy code) → workers-for-platforms/
-├─ Scheduled tasks (cron) → cron-triggers/
-├─ Lightweight edge logic (modify HTTP) → snippets/
-├─ Process Worker execution events (logs/observability) → tail-workers/
-└─ Optimize latency to backend infrastructure → smart-placement/
-```
+## Defaults
 
-### "I need to store data"
+- Prefer `wrangler.jsonc` for new Workers configuration.
+- Run `npx wrangler types` after binding or config changes in TypeScript projects.
+- Use bindings from Workers code when available instead of calling the Cloudflare REST API from inside a Worker.
+- Use `ctx.waitUntil()` for post-response work in Workers.
+- Keep secrets out of source, config, command history, logs, and chat. Use Wrangler secrets or platform secret storage.
+- For account-changing actions, identify the account/zone/project first and surface the target before making the change.
+- For deploys, deletes, migrations, DNS/security changes, and other high-blast-radius operations, stage or dry-run first when the platform supports it.
 
-```
-Need storage?
-├─ Key-value (config, sessions, cache) → kv/
-├─ Relational SQL → d1/ (SQLite) or hyperdrive/ (existing Postgres/MySQL)
-├─ Object/file storage (S3-compatible) → r2/
-├─ Versioned file trees (repos, build outputs, checkpoints) → artifacts/
-├─ Message queue (async processing) → queues/
-├─ Vector embeddings (AI/semantic search) → vectorize/
-├─ Strongly-consistent per-entity state → durable-objects/ (DO storage)
-├─ Secrets management → secrets-store/
-├─ Streaming ETL to R2 → pipelines/
-└─ Persistent cache (long-term retention) → cache-reserve/
-```
+## What Not To Add
 
-### "I need AI/ML"
+This skill intentionally does not bundle local copies of Cloudflare product documentation. Add a local reference only when it captures durable agent-facing procedure, project-specific conventions, or non-obvious failure modes that are not already easy to retrieve from Cloudflare docs.
 
-```
-Need AI?
-├─ Run inference (LLMs, embeddings, images) → workers-ai/
-├─ Vector database for RAG/search → vectorize/
-├─ Build stateful AI agents → agents-sdk/
-├─ Gateway for any AI provider (caching, routing) → ai-gateway/
-└─ AI-powered search widget → ai-search/
-```
-
-### "I need networking/connectivity"
-
-```
-Need networking?
-├─ Expose local service to internet → tunnel/
-├─ TCP/UDP proxy (non-HTTP) → spectrum/
-├─ WebRTC TURN server → turn/
-├─ Private network connectivity → network-interconnect/
-├─ Optimize routing → argo-smart-routing/
-├─ Optimize latency to backend (not user) → smart-placement/
-└─ Real-time video/audio → realtimekit/ or realtime-sfu/
-```
-
-### "I need security"
-
-```
-Need security?
-├─ Web Application Firewall → waf/
-├─ DDoS protection → ddos/
-├─ Bot detection/management → bot-management/
-├─ API protection → api-shield/
-├─ CAPTCHA alternative → turnstile/
-└─ Credential leak detection → waf/ (managed ruleset)
-```
-
-### "I need media/content"
-
-```
-Need media?
-├─ Image optimization/transformation → images/
-├─ Video streaming/encoding → stream/
-├─ Browser automation/screenshots → browser-rendering/
-└─ Third-party script management → zaraz/
-```
-
-### "I need analytics/metrics data"
-
-```
-Need analytics?
-├─ Query across all Cloudflare products (HTTP, Workers, DNS, etc.) → graphql-api/
-├─ Custom high-cardinality metrics from Workers → analytics-engine/
-├─ Client-side (RUM) performance data → web-analytics/
-├─ Workers Logs and real-time debugging → observability/
-└─ Raw logs (Logpush to external tools) → Cloudflare docs
-```
-
-### "I need infrastructure-as-code"
-
-```
-Need IaC? → pulumi/ (Pulumi), terraform/ (Terraform), or api/ (REST API)
-```
-
-## Product Index
-
-### Feature Flags
-| Product | Reference |
-|---------|-----------|
-| Flagship | `references/flagship/` |
-
-### Compute & Runtime
-| Product | Reference |
-|---------|-----------|
-| Workers | `references/workers/` |
-| Pages | `references/pages/` |
-| Pages Functions | `references/pages-functions/` |
-| Durable Objects | `references/durable-objects/` |
-| Workflows | `references/workflows/` |
-| Containers | `references/containers/` |
-| Workers for Platforms | `references/workers-for-platforms/` |
-| Cron Triggers | `references/cron-triggers/` |
-| Tail Workers | `references/tail-workers/` |
-| Snippets | `references/snippets/` |
-| Smart Placement | `references/smart-placement/` |
-
-### Storage & Data
-| Product | Reference |
-|---------|-----------|
-| KV | `references/kv/` |
-| D1 | `references/d1/` |
-| R2 | `references/r2/` |
-| Artifacts | `references/artifacts/` |
-| Queues | `references/queues/` |
-| Hyperdrive | `references/hyperdrive/` |
-| DO Storage | `references/do-storage/` |
-| Secrets Store | `references/secrets-store/` |
-| Pipelines | `references/pipelines/` |
-| R2 Data Catalog | `references/r2-data-catalog/` |
-| R2 SQL | `references/r2-sql/` |
-
-### AI & Machine Learning
-| Product | Reference |
-|---------|-----------|
-| Workers AI | `references/workers-ai/` |
-| Vectorize | `references/vectorize/` |
-| Agents SDK | `references/agents-sdk/` |
-| AI Gateway | `references/ai-gateway/` |
-| AI Search | `references/ai-search/` |
-
-### Networking & Connectivity
-| Product | Reference |
-|---------|-----------|
-| Tunnel | `references/tunnel/` |
-| Spectrum | `references/spectrum/` |
-| TURN | `references/turn/` |
-| Network Interconnect | `references/network-interconnect/` |
-| Argo Smart Routing | `references/argo-smart-routing/` |
-| Workers VPC | `references/workers-vpc/` |
-
-### Security
-| Product | Reference |
-|---------|-----------|
-| WAF | `references/waf/` |
-| DDoS Protection | `references/ddos/` |
-| Bot Management | `references/bot-management/` |
-| API Shield | `references/api-shield/` |
-| Turnstile | `references/turnstile/` |
-
-### Media & Content
-| Product | Reference |
-|---------|-----------|
-| Images | `references/images/` |
-| Stream | `references/stream/` |
-| Browser Rendering | `references/browser-rendering/` |
-| Zaraz | `references/zaraz/` |
-
-### Real-Time Communication
-| Product | Reference |
-|---------|-----------|
-| RealtimeKit | `references/realtimekit/` |
-| Realtime SFU | `references/realtime-sfu/` |
-
-### Developer Tools
-| Product | Reference |
-|---------|-----------|
-| Wrangler | `references/wrangler/` |
-| Miniflare | `references/miniflare/` |
-| C3 | `references/c3/` |
-| Observability | `references/observability/` |
-| GraphQL Analytics API | `references/graphql-api/` |
-| Analytics Engine | `references/analytics-engine/` |
-| Web Analytics | `references/web-analytics/` |
-| Sandbox | `references/sandbox/` |
-| Workerd | `references/workerd/` |
-| Workers Playground | `references/workers-playground/` |
-
-### Infrastructure as Code
-| Product | Reference |
-|---------|-----------|
-| Pulumi | `references/pulumi/` |
-| Terraform | `references/terraform/` |
-| API | `references/api/` |
-
-### Other Services
-| Product | Reference |
-|---------|-----------|
-| Email Routing | `references/email-routing/` |
-| Email Workers | `references/email-workers/` |
-| Static Assets | `references/static-assets/` |
-| Bindings | `references/bindings/` |
-| Cache Reserve | `references/cache-reserve/` |
+Do not add generated API references, command inventories, pricing tables, limits tables, or broad product docs mirrors. Link to current docs and retrieve them when needed.

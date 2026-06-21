@@ -1,6 +1,6 @@
 # Human-in-the-Loop
 
-Fetch https://developers.cloudflare.com/agents/concepts/human-in-the-loop/ for complete documentation.
+Fetch https://developers.cloudflare.com/agents/concepts/agentic-patterns/human-in-the-loop/ for complete documentation.
 
 Multiple patterns for adding human approval to agent actions.
 

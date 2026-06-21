@@ -1,5 +1,14 @@
 # Sandbox SDK API Reference
 
+## Contents
+- Lifecycle
+- Commands
+- Code Interpreter
+- Files
+- Ports
+- Error Handling
+
+
 Detailed API for `@cloudflare/sandbox`. For full docs: https://developers.cloudflare.com/sandbox/api/
 
 ## Lifecycle

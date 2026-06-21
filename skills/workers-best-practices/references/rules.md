@@ -1,5 +1,15 @@
 # Workers Best Practices — Rules
 
+## Contents
+- Configuration
+- Request & Response Handling
+- Architecture
+- Observability
+- Code Patterns
+- Security
+- Development & Testing
+
+
 Each rule has an imperative summary, what to check, the correct pattern, and an anti-pattern where applicable. Code examples are plain TypeScript — no MDX components.
 
 When a rule involves config fields or API signatures that may evolve, a **Retrieve** callout reminds you to check the latest docs or types before flagging. All doc paths are relative to `https://developers.cloudflare.com`.

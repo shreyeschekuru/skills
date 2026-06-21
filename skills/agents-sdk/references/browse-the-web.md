@@ -1,6 +1,6 @@
 # Browse the Web (Experimental)
 
-Fetch https://developers.cloudflare.com/agents/api-reference/browse-the-web/ for complete documentation.
+Fetch https://developers.cloudflare.com/agents/tools/browser/ for complete documentation.
 
 CDP-powered browser tools that let agents scrape, screenshot, and interact with web pages.
 
@@ -47,7 +47,7 @@ export class MyAgent extends AIChatAgent<Env> {
 
 The LLM writes async JavaScript IIFEs that run in a fresh browser session.
 
-## When to Use
+## Fit
 
 - Need a real browser (JS rendering, screenshots, interaction) → browser tools
 - Just need HTML/API data → use `fetch()` instead (faster, cheaper)
