@@ -33,6 +33,9 @@ Before implementing or debugging a product without a focused skill:
 - Confirm account, zone, worker, environment, and resource names before writes or deletes.
 - For new or uncommon Wrangler commands, retrieve `npx wrangler <group> --help` first.
 - Do not cache `env`, bindings, or secret values in module scope. Read them from the handler, Durable Object instance, or current request path.
+- Binding-only deploys may reuse existing isolates. Any module-scope client derived from a secret or binding can keep stale credentials after a binding update.
+- Importing `env` from `cloudflare:workers` can help deeply nested code, but runtime I/O still belongs in a request/object context. Top-level KV reads, service binding calls, or DO method calls will fail.
+- Use `withEnv` or the current test helper when testing code that imports `env` globally.
 
 ## Compute And Runtime
 
@@ -43,6 +46,25 @@ Before implementing or debugging a product without a focused skill:
 - Keep runtime-bound calls such as `fetch()`, binding access, and secret reads inside handlers or object methods, not module initialization.
 - Node.js APIs require current compatibility guidance. Prefer Workers-native APIs when the runtime feature is available without `nodejs_compat`.
 - For Workers code review, prefer the focused `workers-best-practices` skill.
+
+### Browser Run
+
+- Prefer `browser-run` for real browser automation. Do not use Browser Run for simple API calls or fetchable HTML.
+- Browser Run was formerly Browser Rendering. Current docs and older examples may mix names such as `browser-rendering`.
+- The `.quickAction()` binding path requires a current compatibility date and remote mode for local development. Retrieve docs before debugging application code.
+- Treat Live View URLs, session IDs, and CDP endpoints as sensitive. They can expose authenticated pages or human interaction.
+- Browser Run traffic is identified as automated/bot traffic. Do not assume target sites treat it like a normal user browser.
+- WebMCP is lab/experimental. Prefer structured WebMCP tools when available, but do not design production flows around lab-only APIs without retrieving current limits.
+
+### Dynamic Workers
+
+- Prefer `dynamic-workers` when loading Worker code at runtime, especially generated JavaScript or Code Mode-style tool orchestration.
+- Raw Dynamic Workers inherit parent network access when `globalOutbound` is omitted. Set `globalOutbound: null` for untrusted code unless outbound access is intentionally designed.
+- Give dynamic code narrow service bindings or `ctx.exports` capabilities instead of raw secrets or broad Internet access.
+- Use stable, versioned IDs with `env.LOADER.get(id, callback)`. If code or config changes, change the ID.
+- Do not assume repeated calls with the same ID run in the same isolate.
+- Use Tail Workers or host-side logging for generated-code output, error capture, and auditing.
+- Use Sandbox SDK or Containers when the workload needs filesystem, process, shell, package-install, or long-lived runtime behavior.
 
 ### Containers
 
@@ -102,12 +124,34 @@ Before implementing or debugging a product without a focused skill:
 - For multiple sequential database calls, evaluate Smart Placement so the Worker runs near the database.
 - Cacheability depends on query shape and driver behavior; retrieve current docs before promising query caching.
 
+### Secrets Store
+
+- Distinguish per-Worker secrets from account-level Secrets Store bindings. Secrets Store is useful for shared, scoped, and rotated secrets across Workers.
+- Secrets Store bindings are async. Retrieve secrets through the binding API, not by assuming they behave like plain string env vars.
+- Local development may use local secret values unless remote mode is enabled. Do not assume production Secrets Store values are available locally.
+
 ### Vectorize
 
 - Match distance metric and dimensions to the embedding model.
 - Keep source documents or object keys outside Vectorize when content needs retrieval; vectors alone are not full document storage.
 - Rebuild or version indexes when changing embedding models.
 - Treat metadata filters as part of schema design, not an afterthought.
+
+### Artifacts
+
+- Use Artifacts for versioned file trees and Git-compatible handoff, not as a generic blob store.
+- Prefer repo-per-agent, repo-per-session, or repo-per-application boundaries over one shared write-heavy repository.
+- Mint short-lived, least-privilege tokens. Do not hand every agent a long-lived write token.
+- Use unique names with tenant, agent, or session IDs to avoid collisions.
+- Use R2 for simple blob storage when Git history, forks, tokens, or repository semantics are unnecessary.
+
+### Agent Memory
+
+- Treat Agent Memory as a product-specific persistent memory layer, not a replacement for application databases.
+- Namespace by application, environment, tenant, or memory layer; use profiles to isolate users, agents, teams, tenants, or entities.
+- Do not assume recall is complete or authoritative. Confirm recalled information before irreversible actions.
+- Batch memory ingestion at natural checkpoints instead of calling ingestion after every turn.
+- If the beta product is unavailable or you need custom schema/query control, use Durable Objects, D1, KV, or Vectorize.
 
 ## Async And Orchestration
 
@@ -120,10 +164,20 @@ Before implementing or debugging a product without a focused skill:
 - Use dead-letter queues and error classification for poison messages.
 - Do not use `batch.messages.forEach(async ...)`; use `for...of` with `await` or `Promise.all()` so processing completes before the handler returns.
 - If a producer sends messages with `ctx.waitUntil()`, catch and log send failures because the HTTP response will not naturally surface them.
+- If one message in a batch fails without explicit acknowledgements, more of the batch may retry than intended.
+- Individual `ack()` and `retry()` decisions should be deliberate; retrieve current precedence rules before mixing per-message and batch calls.
+- Leave consumer concurrency unset unless an upstream dependency needs protection. Setting max concurrency to one disables useful autoscaling.
 
 ### Workflows
 
 - Design steps to be idempotent and restart-safe.
+- Keep step names deterministic. Step names act like durable execution keys.
+- Keep steps granular and self-contained; do not put an entire business process into one giant step.
+- Do not rely on mutable state outside step returns. Workflows can hibernate and lose in-memory state.
+- Put side effects inside `step.do()` unless repeating the action after a restart is acceptable.
+- Return serializable step state only. Do not return `Request`, `Response`, `Error`, class instances, functions, locked streams, or already-read streams.
+- Use unique instance IDs deliberately. `create()` can fail for an existing ID within retention; `createBatch()` has different idempotency behavior.
+- Use `NonRetryableError` for permanent validation failures and rollback handlers for compensating actions.
 - Persist critical final outputs to durable storage before instance retention windows matter.
 - Use Workflows for durable multi-step orchestration, not as a substitute for every background job.
 - Validate workflow names, event types, and bindings against current docs and generated types.
@@ -184,6 +238,8 @@ Before implementing or debugging a product without a focused skill:
 - Use Tunnel/Cloudflare One for private HTTP app exposure and Zero Trust access.
 - Use Spectrum for non-HTTP TCP/UDP protocols.
 - For private databases from Workers, compare Hyperdrive, TCP sockets, Tunnel, and VPC/private-network patterns against current docs.
+- For Worker access to internal services, distinguish scoped Workers VPC Services from broader Workers VPC Networks before choosing raw TCP sockets.
+- Retrieve current troubleshooting docs when debugging private connectivity: `https://developers.cloudflare.com/workers-vpc/reference/troubleshooting/`, `https://developers.cloudflare.com/workers/runtime-apis/tcp-sockets/#troubleshooting`, and `https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/troubleshoot-tunnels/`.
 - For physical/private interconnects, design high availability from the start; single-link setups are operationally fragile.
 
 ### WAF, API Shield, Bot Management

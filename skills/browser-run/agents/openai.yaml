@@ -1,0 +1,4 @@
+interface:
+  display_name: "Browser Run"
+  short_description: "Automate browsers on Cloudflare"
+  default_prompt: "Use $browser-run to add Cloudflare Browser Run automation to this Worker."

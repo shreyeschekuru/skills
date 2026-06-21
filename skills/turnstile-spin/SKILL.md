@@ -43,7 +43,7 @@ The user pasted the prompt. You are in a multi-step dialog. Detect what you can,
 
 10. **Frontend edits.** State the contract: "I'll add the widget + gate the existing submit handler on `success === true`. The existing handler logic stays the same." Ask "yes" / "show". **[wait for user]** If "show", print unified diffs and ask again. Do NOT propose alternate behavior (mail delivery, custom backends).
 
-11. **Validation.** Run `scripts/validate.sh`. Report each check as it passes. If any fails, surface the error and stop. **[wait for user if anything fails]**
+11. **Validation.** Run `scripts/validate.sh` with `--worker-url`, `--account-id`, `--sitekey`, `--expected-domains`, and `--written-files` set to the newline- or comma-separated frontend files that received widget snippets in Step 10. The script checks Worker health, dummy siteverify, managed-worker metadata, widget domains, and that every written widget snippet file contains the Spin `data-action` marker. For dashboard recovery flows that preserve `data-action="turnstile-spin-v2"`, pass `--allowed-actions turnstile-spin-v1,turnstile-spin-v2`. Report each check as it passes. If any fails, surface the error and stop. **[wait for user if anything fails]**
 
 12. **Persist skill.** Ask: "Save the Spin skill to `.claude/skills/turnstile-spin/SKILL.md` so I can reuse it on follow-up tasks?" Default yes. **[wait for user]** Then run `scripts/persist-skill.sh --path <agent-specific-path>`.
 

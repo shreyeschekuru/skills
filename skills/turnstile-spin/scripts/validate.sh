@@ -9,12 +9,15 @@
 #   --account-id <id>      Cloudflare account ID
 #   --sitekey <key>        Widget sitekey (from widget-create.sh)
 #   --expected-domains <a,b,c>  Comma-separated domains that must appear in the widget's domains array
+#   --written-files <paths>  Comma- or newline-separated frontend files that received widget snippets
+#   --allowed-actions <a,b>  Comma-separated Turnstile action markers. Defaults to turnstile-spin-v1.
 #
-# Outputs JSON. Exit 0 if all three checks pass, 1 otherwise.
+# Outputs JSON. Exit 0 if all checks pass, 1 otherwise.
 #   ok:    {"status":"ok"}
-#   fail:  {"status":"error","check":"health|dummy_siteverify|worker_metadata|hostname","detail":"<msg>"}
+#   fail:  {"status":"error","check":"health|dummy_siteverify|worker_metadata|hostname|frontend_marker","detail":"<msg>"}
 
 set -uo pipefail
+ALLOWED_ACTIONS="${ALLOWED_ACTIONS:-turnstile-spin-v1}"
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -22,6 +25,8 @@ while [[ $# -gt 0 ]]; do
     --account-id)       ACCOUNT_ID="$2"; shift 2 ;;
     --sitekey)          SITEKEY="$2"; shift 2 ;;
     --expected-domains) EXPECTED_DOMAINS="$2"; shift 2 ;;
+    --written-files)    WRITTEN_FILES="$2"; shift 2 ;;
+    --allowed-actions)  ALLOWED_ACTIONS="$2"; shift 2 ;;
     *) echo "validate: unknown arg $1" >&2; exit 2 ;;
   esac
 done
@@ -82,6 +87,50 @@ if [ -n "$missing" ]; then
   echo "validate: hostname check failed; domains not on widget: $missing" >&2
   echo "{\"status\":\"error\",\"check\":\"hostname\",\"detail\":\"missing domains: ${missing% }\"}"
   exit 1
+fi
+
+# Check 4: every frontend widget snippet written by the wizard includes the Spin marker.
+# Widgets created by this skill use turnstile-spin-v1. Dashboard recovery flows may
+# preserve turnstile-spin-v2, so callers can explicitly allow both when appropriate.
+if [ -n "${WRITTEN_FILES:-}" ]; then
+  marker_missing=""
+  missing_files=""
+
+  while IFS= read -r file; do
+    [ -z "$file" ] && continue
+
+    if [ ! -f "$file" ]; then
+      missing_files="${missing_files}${file} "
+      continue
+    fi
+
+    found="false"
+    IFS=',' read -ra ACTIONS <<< "$ALLOWED_ACTIONS"
+    for action in "${ACTIONS[@]}"; do
+      if grep -q "data-action=\"$action\"" "$file"; then
+        found="true"
+        break
+      fi
+    done
+
+    if [ "$found" != "true" ]; then
+      marker_missing="${marker_missing}${file} "
+    fi
+  done <<EOF
+$(printf '%s\n' "$WRITTEN_FILES" | tr ',' '\n')
+EOF
+
+  if [ -n "$missing_files" ]; then
+    echo "validate: frontend files not found: $missing_files" >&2
+    echo "{\"status\":\"error\",\"check\":\"frontend_marker\",\"detail\":\"frontend files not found: ${missing_files% }\"}"
+    exit 1
+  fi
+
+  if [ -n "$marker_missing" ]; then
+    echo "validate: Spin telemetry marker missing from written files: $marker_missing" >&2
+    echo "{\"status\":\"error\",\"check\":\"frontend_marker\",\"detail\":\"missing data-action marker in: ${marker_missing% }\"}"
+    exit 1
+  fi
 fi
 
 echo '{"status":"ok"}'
