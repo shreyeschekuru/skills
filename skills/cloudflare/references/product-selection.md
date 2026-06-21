@@ -8,22 +8,22 @@ Use this as a selection checklist, not an API reference. Retrieve current Cloudf
 
 ## Prefer Focused Skills
 
-Load or follow focused skills first when they match:
+Use the user's goal as the routing signal. Load or follow focused skills first when one clearly matches:
 
-| Task | Prefer |
+| User need | Prefer |
 | --- | --- |
-| Wrangler commands, config, resource creation | `wrangler` |
-| Browser automation, screenshots, PDFs, crawlers | `browser-run` |
-| Runtime-loaded or AI-generated Worker code | `dynamic-workers` |
-| Durable multi-step orchestration | `workflows` |
-| Workers code review or production Worker patterns | `workers-best-practices` |
-| Durable Objects, SQLite per object, WebSockets | `durable-objects` |
-| Agents SDK, chat agents, MCP, scheduling | `agents-sdk` |
-| Sandbox SDK, code execution, interpreter environments | `sandbox-sdk` |
-| Transactional email sending or routing | `cloudflare-email-service` |
-| Feature flags, targeting, gradual rollouts | `flagship` |
-| Turnstile setup or CAPTCHA migration | `turnstile-spin` |
-| Cloudflare One or SASE/Zero Trust | `cloudflare-one` or `cloudflare-one-migrations` |
+| Create, inspect, configure, or deploy Cloudflare resources from the CLI | `wrangler` |
+| Automate a real browser for screenshots, PDFs, crawlers, CDP, Playwright, or Puppeteer | `browser-run` |
+| Run AI-generated or runtime-loaded Worker code inside a Worker | `dynamic-workers` |
+| Coordinate durable multi-step work with sleeps, retries, waits, or rollbacks | `workflows` |
+| Review Worker code or apply production Worker implementation patterns | `workers-best-practices` |
+| Keep per-object state, coordinate WebSockets, or use SQLite per object | `durable-objects` |
+| Build a stateful AI agent, chat app, MCP integration, scheduler, or voice workflow | `agents-sdk` |
+| Execute untrusted code, run an interpreter, or need filesystem/process isolation | `sandbox-sdk` |
+| Send transactional email or route inbound email | `cloudflare-email-service` |
+| Evaluate feature flags, target users, or roll out changes gradually | `flagship` |
+| Add CAPTCHA or Turnstile bot protection to a form or app | `turnstile-spin` |
+| Plan Zero Trust, Access, Gateway, WARP, SASE, or private network work | `cloudflare-one` or `cloudflare-one-migrations` |
 
 ## Common Choices
 
