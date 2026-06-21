@@ -46,13 +46,16 @@ Prefer current sources before exact APIs, limits, or pricing:
     {
       "name": "billing-workflow",
       "binding": "BILLING_WORKFLOW",
-      "class_name": "BillingWorkflow"
+      "class_name": "BillingWorkflow",
+      "schedules": ["0 * * * *"]
     }
   ]
 }
 ```
 
 Use `script_name` for cross-script calls when the calling Worker binds to a Workflow defined in another Worker.
+
+Use `schedules` on the binding for cron-started Workflow instances. Each cron run creates an instance automatically; do not add a separate Worker `scheduled()` handler unless the trigger needs custom logic.
 
 ## Implementation Rules
 
@@ -62,6 +65,7 @@ Use `script_name` for cross-script calls when the calling Worker binds to a Work
 - Do not rely on mutable state outside step returns. Workflows can hibernate and lose in-memory state.
 - Do not mutate `event.payload`; return durable state from steps and pass that state forward.
 - Name steps deterministically. Step names are part of cached execution identity.
+- Use the `step.do()` callback context when retry-aware code needs it. Current docs expose properties such as the step name/count, attempt, and config; retrieve generated types before relying on exact names.
 - Be careful with `Promise.race()` and `Promise.any()` around steps; retrieve current docs before using them.
 - Create Hyperdrive or external database connections inside the step that uses them, not once across multiple steps.
 

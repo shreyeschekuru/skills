@@ -124,6 +124,15 @@ Streams automatically resume if client disconnects and reconnects:
 const { messages } = useAgentChat({ agent, resume: false });
 ```
 
+Use the recovery signal in production UIs so reconnects, deploys, and Durable Object evictions do not look frozen:
+
+```tsx
+const { messages, isStreaming, isRecovering } = useAgentChat({ agent });
+const busy = isStreaming || isRecovering;
+```
+
+For provider streams that can hang indefinitely, set `chatStreamStallTimeoutMs` on the agent after retrieving current docs. A stalled stream then enters the durable recovery path instead of leaving a permanent spinner.
+
 ## React Client
 
 ```tsx
@@ -194,6 +203,7 @@ Client receives streamed messages via WebSocket RPC.
 | `maxPersistedMessages` | Limit stored messages (prune oldest) |
 | `messageConcurrency` | `"queue"` (default), `"latest"`, `"merge"`, `"drop"` |
 | `chatRecovery` | `"persist"` (default) or `"continue"` on reconnect |
+| `chatStreamStallTimeoutMs` | Recover hung provider streams after the configured timeout |
 | `waitForMcpConnections` | Wait for MCP servers before first turn |
 
 ## Status Values
@@ -207,4 +217,4 @@ Client receives streamed messages via WebSocket RPC.
 | `submitted` | Request sent, waiting |
 | `error` | Error occurred |
 
-Also: `isStreaming`, `isServerStreaming` for distinguishing user vs server-initiated streams.
+Also: `isStreaming`, `isServerStreaming`, and `isRecovering` for distinguishing user streams, server-initiated streams, and recovery replay.

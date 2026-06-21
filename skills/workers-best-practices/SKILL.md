@@ -50,6 +50,7 @@ mkdir -p /tmp/workers-types-latest && \
 | Rule | Summary |
 |------|---------|
 | Streaming | Stream large/unknown payloads — never `await response.text()` on unbounded data |
+| WebSocket binary data | Handle `Blob` binary messages or set `binaryType` before `accept()` |
 | waitUntil | Use `ctx.waitUntil()` for post-response work; do not destructure `ctx` |
 
 ### Architecture
@@ -67,6 +68,7 @@ mkdir -p /tmp/workers-types-latest && \
 | Rule | Summary |
 |------|---------|
 | Logs & Traces | Enable `observability` in config with `head_sampling_rate`; use structured JSON logging |
+| Custom spans | Use `tracing.enterSpan()` or `ctx.tracing` for meaningful application spans |
 
 ### Code Patterns
 
@@ -96,6 +98,7 @@ mkdir -p /tmp/workers-types-latest && \
 | `ctx.passThroughOnException()` as error handling | Hides bugs, makes debugging impossible |
 | Hand-written `Env` interface | Drifts from actual wrangler config bindings |
 | Direct string comparison for secret values | Timing side-channel — use `crypto.subtle.timingSafeEqual` |
+| Assuming binary WebSocket messages are always `ArrayBuffer` | Current Workers deliver `Blob` unless `binaryType` is set or old compatibility flags apply |
 | Destructuring `ctx` (`const { waitUntil } = ctx`) | Loses `this` binding — throws "Illegal invocation" at runtime |
 | `any` on `Env` or handler params | Defeats type safety for all binding access |
 | `as unknown as T` double-cast | Hides real type incompatibilities — fix the design |

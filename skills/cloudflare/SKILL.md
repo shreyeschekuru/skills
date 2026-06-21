@@ -22,7 +22,7 @@ When retrieved docs and local skill guidance disagree, trust the retrieved docs 
 ## Workflow
 
 1. Classify the task: build, review, debug, migrate, configure, deploy, observe, or plan.
-2. Prefer a focused skill when one matches: `wrangler`, `browser-run`, `dynamic-workers`, `workflows`, `agents-sdk`, `durable-objects`, `workers-best-practices`, `sandbox-sdk`, `cloudflare-email-service`, `cloudflare-one`, `cloudflare-one-migrations`, `web-perf`, or `turnstile-spin`.
+2. Prefer a focused skill when one matches: `wrangler`, `browser-run`, `dynamic-workers`, `workflows`, `agents-sdk`, `durable-objects`, `workers-best-practices`, `sandbox-sdk`, `cloudflare-email-service`, `flagship`, `cloudflare-one`, `cloudflare-one-migrations`, `web-perf`, or `turnstile-spin`.
 3. For broad product choice, read `references/product-selection.md`.
 4. For products without a focused skill, or when debugging an implementation, read `references/platform-gotchas.md`.
 5. Retrieve only the current docs needed for the products involved.
@@ -46,11 +46,11 @@ When retrieved docs and local skill guidance disagree, trust the retrieved docs 
 | Secure code execution and code interpreters | `sandbox-sdk` | `https://developers.cloudflare.com/sandbox/` |
 | Transactional email sending or routing | `cloudflare-email-service` | `https://developers.cloudflare.com/email-service/` |
 | Turnstile setup or CAPTCHA migration | `turnstile-spin` | `https://developers.cloudflare.com/turnstile/` |
-| Feature flags, targeting, gradual rollouts | Flagship docs | `https://developers.cloudflare.com/flagship/` |
+| Feature flags, targeting, gradual rollouts | `flagship` | `https://developers.cloudflare.com/flagship/` |
 | KV, D1, R2, Queues, Vectorize, Hyperdrive | Product docs plus `wrangler` | `https://developers.cloudflare.com/` |
 | R2 Data Catalog, R2 SQL, Pipelines, lakehouse analytics | Product docs plus `platform-gotchas.md` | `https://developers.cloudflare.com/r2-sql/`, `https://developers.cloudflare.com/pipelines/`, `https://developers.cloudflare.com/r2/data-catalog/` |
 | Cache Reserve and CDN cache behavior | Cache docs plus `platform-gotchas.md` | `https://developers.cloudflare.com/cache/` |
-| Artifacts, Agent Memory, Images, Media Transformations, Rate Limiting, mTLS, Version Metadata, Secrets Store | Product docs plus `wrangler` and `platform-gotchas.md` | `https://developers.cloudflare.com/llms.txt` |
+| Artifacts, Agent Memory, Images, Stream, Media Transformations, Rate Limiting, mTLS, Version Metadata, Secrets Store | Product docs plus `wrangler` and `platform-gotchas.md` | `https://developers.cloudflare.com/llms.txt` |
 | Workers AI model inference | Workers AI docs plus Workers bindings | `https://developers.cloudflare.com/workers-ai/` |
 | AI provider routing, caching, logs, fallback | AI Gateway docs | `https://developers.cloudflare.com/ai-gateway/` |
 | Managed RAG, semantic search, agent search endpoint | AI Search docs | `https://developers.cloudflare.com/ai-search/` |

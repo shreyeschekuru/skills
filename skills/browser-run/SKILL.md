@@ -55,6 +55,7 @@ Add Node.js compatibility flags only when the selected library requires them. Br
 
 - Use Quick Actions for common stateless jobs: screenshots, PDFs, rendered Markdown, rendered HTML, links, structured JSON, snapshots, and crawls.
 - The Worker binding `.quickAction()` path requires a current compatibility date from the docs. As of the June 2026 docs, it requires `2026-03-24` or later.
+- For `snapshot`, use `formats` when you need multiple outputs in one call, such as `["screenshot", "markdown", "accessibilityTree"]`. Request at least two formats; use the single-format Quick Action or endpoint when only one output is needed.
 - `.quickAction()` is not supported in default local mode. Use `npx wrangler dev --remote` or set the browser binding `remote: true` for local testing of Quick Actions.
 - If local calls fail with `The RPC receiver does not implement the method "quickAction"`, check remote mode and compatibility date before debugging application code.
 

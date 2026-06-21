@@ -60,6 +60,7 @@ Skills are contextual and auto-loaded based on your conversation. When a request
 | cloudflare-email-service | Transactional email sending, Email Routing, Workers email bindings, REST email API, and deliverability |
 | dynamic-workers | Runtime-loaded Workers, Worker Loader bindings, generated-code execution, egress control, and dynamic sandboxing |
 | durable-objects | Stateful coordination (chat rooms, games, booking), RPC, SQLite, alarms, WebSockets |
+| flagship | Cloudflare feature flags, typed values, targeting rules, percentage rollouts, Workers evaluation, and API automation |
 | sandbox-sdk | Secure code execution for AI code execution, code interpreters, CI/CD systems, and interactive dev environments |
 | workflows | Durable multi-step Workers applications with retries, sleeps, events, rollback, and instance management |
 | wrangler | Deploying and managing Workers, KV, R2, D1, Vectorize, Queues, Workflows, Browser Run, AI Search, and related resources |

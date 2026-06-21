@@ -38,7 +38,8 @@ export class MyAgent extends AIChatAgent<Env> {
     const browserTools = createBrowserTools({
       ctx: this.ctx,
       browser: this.env.BROWSER,
-      loader: this.env.LOADER
+      loader: this.env.LOADER,
+      session: { mode: "dynamic" }
     });
 
     const result = streamText({

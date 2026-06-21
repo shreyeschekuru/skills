@@ -1,6 +1,6 @@
 ---
 name: agents-sdk
-description: Build AI agents on Cloudflare Workers with the Agents SDK. Load for stateful agents, chat agents, WebSocket apps, scheduled tasks, durable workflows, callable RPC, MCP servers or clients, email, voice, Browser Run automation, Code Mode, queues, retries, observability, or React hooks. Retrieve current Cloudflare docs before exact APIs.
+description: Build AI agents on Cloudflare Workers with the Agents SDK. Load for stateful agents, chat agents, WebSocket apps, scheduled tasks, durable workflows, callable RPC, MCP servers or clients, Agent Skills, messengers, email, voice, Browser Run automation, Code Mode, queues, retries, observability, or React hooks. Retrieve current Cloudflare docs before exact APIs.
 ---
 
 # Cloudflare Agents SDK
@@ -45,7 +45,8 @@ Cloudflare docs: https://developers.cloudflare.com/agents/
 | Voice | [Voice](https://developers.cloudflare.com/agents/communication-channels/voice/) | Experimental STT/TTS, `withVoice` |
 | Browse the web | [Browser tools](https://developers.cloudflare.com/agents/tools/browser/), [Browser Run](https://developers.cloudflare.com/browser-run/) | Browser Run-backed CDP/browser automation |
 | Code Mode | [Code Mode](https://developers.cloudflare.com/agents/model-context-protocol/protocol/codemode/), [Dynamic Workers](https://developers.cloudflare.com/dynamic-workers/) | Generated code orchestration via Worker Loaders |
-| Think | [Think](https://developers.cloudflare.com/agents/harnesses/think/) | Experimental higher-level chat agent class |
+| Think | [Think](https://developers.cloudflare.com/agents/harnesses/think/) | Higher-level chat agent class, Agent Skills, messengers, scheduled tasks |
+| Think Workflows | [Think Workflows](https://developers.cloudflare.com/agents/harnesses/think/workflows/) | `ThinkWorkflow`, `step.prompt()`, durable model steps |
 | Chat/Think upgrades | [Chat agents](https://developers.cloudflare.com/agents/communication-channels/chat/chat-agents/), [Think](https://developers.cloudflare.com/agents/harnesses/think/) | Retrieve current package docs and changelogs before migrating |
 
 ## Capabilities
@@ -64,13 +65,15 @@ The Agents SDK provides:
 - **Streaming chat** — `AIChatAgent` with resumable streams, message persistence, tools
 - **Server-driven messages** — `saveMessages`, `waitUntilStable` for proactive agent turns
 - **React hooks** — `useAgent`, `useAgentChat` for client apps
+- **Agent Skills** (experimental) — On-demand instructions, resources, and scripts for Think via `agents:skills`, R2, or manifests
+- **Messengers** — Think-owned webhook routing and durable replies for providers such as Telegram
 - **Observability** — `diagnostics_channel` events for state, RPC, schedule, lifecycle
 - **Push notifications** — Web Push + VAPID delivery from agents
 - **Webhooks** — Receive and verify external webhooks
 - **Voice** (experimental) — STT/TTS via `@cloudflare/voice`
 - **Browser Run tools** — CDP-powered browsing through Browser Run and `agents/browser`
 - **Code Mode** — Generated code orchestration through Worker Loader-backed Dynamic Workers
-- **Think** (experimental) — Higher-level chat agent via `@cloudflare/think`
+- **Think** — Higher-level chat agent via `@cloudflare/think`, including scheduled tasks and durable `step.prompt()` workflows
 
 ## FIRST: Verify Installation
 
@@ -86,6 +89,11 @@ npm install agents
 For chat agents:
 ```bash
 npm install agents @cloudflare/ai-chat ai @ai-sdk/react
+```
+
+For Think agents:
+```bash
+npm install agents @cloudflare/think @cloudflare/ai-chat ai
 ```
 
 ## Wrangler Configuration
@@ -217,7 +225,7 @@ function App() {
 - **[references/observability.md](references/observability.md)** — Diagnostics-channel events
 
 ### Experimental
-- **[references/think.md](references/think.md)** — `@cloudflare/think` higher-level chat agent
+- **[references/think.md](references/think.md)** — `@cloudflare/think`, Agent Skills, messengers, scheduled tasks, Think Workflows
 - **[references/voice.md](references/voice.md)** — `@cloudflare/voice` STT/TTS
 - **[references/codemode.md](references/codemode.md)** — Code Mode for tool orchestration
 - **[references/browse-the-web.md](references/browse-the-web.md)** — CDP browser tools

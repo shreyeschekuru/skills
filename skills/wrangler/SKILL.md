@@ -42,6 +42,7 @@ When docs, schema, and generated types disagree, trust the project-local Wrangle
 | Tail logs | `npx wrangler tail` |
 | Startup profiling | `npx wrangler check startup` |
 | Secret write | `npx wrangler secret put NAME` |
+| Bulk secret sync | `npx wrangler secret bulk < secrets.json` |
 | Command discovery | `npx wrangler <group> --help` |
 
 Use environment flags only after confirming the project defines the target environment.
@@ -57,6 +58,8 @@ Use environment flags only after confirming the project defines the target envir
 - Match binding names in config to code and generated types.
 - Binding arrays are often non-inheritable across Wrangler environments. Repeat bindings such as `vars`, KV, D1, R2, AI Search, Vectorize, service bindings, Queues, Workflows, tail consumers, required secrets, and Secrets Store entries in each environment that needs them.
 - For Durable Objects, never edit old migration tags; add a new migration tag.
+- For D1 projects with nested migrations, use `migrations_pattern` after retrieving current D1 migration docs. The pattern is relative to the Wrangler config file and defaults to `${migrations_dir}/*.sql`.
+- For Pipelines bindings, use the `stream` config field. The old `pipeline` field is deprecated, though the runtime binding API remains the same.
 - Automatic resource provisioning can create KV, R2, and D1 resources when IDs are omitted, but generated IDs may be written back only for local CLI deploy flows. Inspect docs before relying on dashboard/Git deploys to update source config.
 - Frameworks and build tools may redirect Wrangler to generated config under `.wrangler/deploy/config.json`; inspect generated config before diagnosing deploy/dev behavior.
 - For local development with real remote resources, set per-binding `remote: true` only after the user understands it will touch real resources.
@@ -74,6 +77,7 @@ Retrieve current command help before using these groups:
 | Vectorize | `npx wrangler vectorize --help` |
 | Hyperdrive | `npx wrangler hyperdrive --help` |
 | Workflows | `npx wrangler workflows --help` |
+| Pipelines | `npx wrangler pipelines --help` |
 | Browser Run sessions | `npx wrangler browser --help` |
 | AI Search | `npx wrangler ai-search --help` |
 | Workers VPC | `npx wrangler vpc --help` |
@@ -92,6 +96,7 @@ Prefer Wrangler-managed resource creation when the user wants local reproducibil
 - Never pass secret values as command arguments.
 - Prefer the interactive `npx wrangler secret put NAME` prompt.
 - For automation, pipe from a protected file or secret manager; do not use `echo` in examples.
+- For bulk updates, prefer JSON piped to `npx wrangler secret bulk`. A secret value creates/updates it, `null` deletes it, omitted secrets are unchanged, `.env` input cannot delete secrets, and current requests support up to 100 create/update/delete operations.
 - Do not print existing secret values. Wrangler normally only lists names.
 - Confirm the worker name and environment before writing or deleting a secret.
 

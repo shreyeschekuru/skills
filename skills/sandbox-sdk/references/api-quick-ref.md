@@ -5,7 +5,7 @@
 - Commands
 - Code Interpreter
 - Files
-- Ports
+- Tunnels
 - Error Handling
 
 
@@ -20,15 +20,20 @@ interface SandboxOptions {
   sleepAfter?: string;     // Duration before auto-sleep (default: "10m")
   keepAlive?: boolean;     // Prevent auto-sleep (default: false)
   normalizeId?: boolean;   // Lowercase IDs for preview URLs (default: false)
+  transport?: 'rpc';       // Prefer RPC transport for current SDKs
+  enableDefaultSession?: boolean;  // Set false; default sessions are deprecated
 }
 
 await sandbox.destroy(): Promise<void>  // Immediately terminate and delete all state
 ```
 
+Use `sandbox.createSession()` for deliberate shared shell state. Do not rely on the deprecated default `exec()` session behavior for generated command sequences.
+
 ## Commands
 
 ```typescript
 await sandbox.exec(command: string, options?: ExecOptions): Promise<ExecResult>
+await sandbox.startProcess(command: string, options?: ExecOptions): Promise<Process>
 
 interface ExecOptions {
   cwd?: string;           // Working directory
@@ -92,13 +97,13 @@ interface FileMetadata {
 }
 ```
 
-## Ports
+## Tunnels
 
 ```typescript
-await sandbox.exposePort(port: number): Promise<{ url: string; token: string }>
-await sandbox.unexposePort(port: number): Promise<void>
-await sandbox.listPorts(): Promise<PortInfo[]>
+await sandbox.tunnels.get(port: number, options?: { name?: string }): Promise<{ url: string }>
 ```
+
+Quick tunnels create zero-config `*.trycloudflare.com` URLs. Named tunnels create persistent hostnames in the account's zone. `exposePort()` and `unexposePort()` are deprecated; do not use them in new code.
 
 ## Error Handling
 

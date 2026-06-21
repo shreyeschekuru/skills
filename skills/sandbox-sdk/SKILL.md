@@ -59,12 +59,13 @@ export { Sandbox } from '@cloudflare/sandbox';  // Required export
 |------|--------|
 | Get sandbox | `getSandbox(env.Sandbox, 'user-123')` |
 | Run command | `await sandbox.exec('python script.py')` |
+| Start service | `await sandbox.startProcess('python -m http.server 8080')` |
 | Run code (interpreter) | `await sandbox.runCode(code, { language: 'python' })` |
 | Write file | `await sandbox.writeFile('/workspace/app.py', content)` |
 | Read file | `await sandbox.readFile('/workspace/app.py')` |
 | Create directory | `await sandbox.mkdir('/workspace/src', { recursive: true })` |
 | List files | `await sandbox.listFiles('/workspace')` |
-| Expose port | `await sandbox.exposePort(8080)` |
+| Preview URL | `await sandbox.tunnels.get(8080)` |
 | Destroy | `await sandbox.destroy()` |
 
 ## Core Patterns
@@ -72,10 +73,15 @@ export { Sandbox } from '@cloudflare/sandbox';  // Required export
 ### Execute Commands
 
 ```typescript
-const sandbox = getSandbox(env.Sandbox, 'user-123');
+const sandbox = getSandbox(env.Sandbox, 'user-123', {
+  transport: 'rpc',
+  enableDefaultSession: false
+});
 const result = await sandbox.exec('python --version');
 // result: { stdout, stderr, exitCode, success }
 ```
+
+Use `enableDefaultSession: false` for agent-generated command sequences unless the app deliberately creates explicit sessions. HTTP and WebSocket transports are deprecated; prefer RPC transport or the current docs' default.
 
 ### Code Interpreter (Recommended for AI)
 
@@ -129,21 +135,28 @@ RUN npm install -g typescript
 # System packages
 RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
 
-EXPOSE 8080  # Required for local dev port exposure
+EXPOSE 8080  # Optional documentation for services that listen on this port
 ```
 
 Keep images lean - affects cold start time.
 
-## Preview URLs (Port Exposure)
+## Preview URLs (Tunnels)
 
-Expose HTTP services running in sandboxes:
+Expose HTTP services running in sandboxes through Cloudflare Tunnel:
 
 ```typescript
-const { url } = await sandbox.exposePort(8080);
-// Returns preview URL for the service
+await sandbox.startProcess('python -m http.server 8080');
+const tunnel = await sandbox.tunnels.get(8080);
+// tunnel.url is a zero-config *.trycloudflare.com URL
 ```
 
-**Production requirement**: Preview URLs need a custom domain with wildcard DNS (`*.yourdomain.com`). The `.workers.dev` domain does not support preview URL subdomains.
+For stable URLs, use named tunnels:
+
+```typescript
+const tunnel = await sandbox.tunnels.get(8080, { name: 'my-app-preview' });
+```
+
+`exposePort()` is deprecated. Use `sandbox.tunnels` for new code; quick tunnels work on `.workers.dev`, and named tunnels create persistent hostnames in your zone. `sandbox.destroy()` tears down associated tunnels and DNS records.
 
 See: https://developers.cloudflare.com/sandbox/guides/expose-services/
 
@@ -163,11 +176,14 @@ See `examples/openai-agents` for complete integration pattern.
 - Containers sleep after 10 minutes of inactivity (configurable via `sleepAfter`)
 - Use `destroy()` to immediately free resources
 - Same `sandboxId` always returns same sandbox instance
+- Prefer explicit sessions with `sandbox.createSession()` when commands need shared shell state; default sessions are deprecated.
 
 ## Anti-Patterns
 
 - **Don't use internal clients** (`CommandClient`, `FileClient`) - use `sandbox.*` methods
 - **Don't skip the Sandbox export** - Worker won't deploy without `export { Sandbox }`
+- **Don't use deprecated transports or `exposePort()`** - prefer RPC transport and `sandbox.tunnels`
+- **Don't rely on default command sessions** - disable default sessions and create explicit sessions when needed
 - **Don't hardcode sandbox IDs for multi-user** - use user/session identifiers
 - **Don't forget cleanup** - call `destroy()` for temporary sandboxes
 

@@ -150,6 +150,26 @@ return new Response(text);
 
 **Retrieve**: streaming APIs at `/workers/runtime-apis/streams/`.
 
+### Handle WebSocket binary messages deliberately
+
+Workers with compatibility date `2026-03-17` or later deliver binary `message` event data as `Blob` by default. If code expects `ArrayBuffer`, set `binaryType` before `accept()`.
+
+**Check**: WebSocket handlers that process binary data either handle `Blob` or set `ws.binaryType = "arraybuffer"` before `ws.accept()`. Hibernatable Durable Object `webSocketMessage` handlers still receive binary data as `ArrayBuffer`.
+
+```ts
+const ws = response.webSocket;
+ws.binaryType = "arraybuffer";
+ws.accept();
+
+ws.addEventListener("message", (event) => {
+  if (event.data instanceof ArrayBuffer) {
+    handleFrame(event.data);
+  }
+});
+```
+
+**Retrieve**: `/workers/runtime-apis/websockets/` and compatibility flag docs for `websocket_standard_binary_type`.
+
 ### Use waitUntil for work after the response
 
 `ctx.waitUntil()` performs background work (analytics, cache writes, webhooks) after the response is sent. Keeps response fast. 30-second time limit after response.
@@ -325,6 +345,17 @@ Anti-pattern:
 ```ts
 // Unstructured string logs — hard to query
 console.log("Got a request to " + url.pathname);
+```
+
+Use custom spans for meaningful application work after tracing is enabled. Keep span names stable and attributes low-cardinality and non-secret.
+
+```ts
+import { tracing } from "cloudflare:workers";
+
+await tracing.enterSpan("loadUserProfile", async (span) => {
+  span.setAttribute("profile.source", "d1");
+  return await env.DB.prepare("SELECT * FROM profiles WHERE user_id = ?").bind(userId).first();
+});
 ```
 
 **Retrieve**: `/workers/observability/logs/workers-logs/` and `/workers/observability/traces/` for current config options.

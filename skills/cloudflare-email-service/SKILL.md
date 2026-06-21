@@ -1,6 +1,6 @@
 ---
 name: cloudflare-email-service
-description: Send and receive transactional email with Cloudflare Email Service. Load for Email Sending, Email Routing, Workers send_email bindings, REST email API, Agents SDK email handling, deliverability, SPF/DKIM/DMARC, wrangler email setup, or MCP email tools. Retrieve current docs before exact APIs.
+description: Send and receive transactional email with Cloudflare Email Service. Load for Email Sending, Email Routing, Workers send_email bindings, REST email API, SMTP submission, Agents SDK email handling, deliverability, SPF/DKIM/DMARC, wrangler email setup, or MCP email tools. Retrieve current docs before exact APIs.
 ---
 
 # Cloudflare Email Service
@@ -37,6 +37,7 @@ Start here. Find your situation, then follow the link for full details.
 | **Send emails from a Cloudflare Worker** | Workers binding (no API keys needed) | [sending.md](references/sending.md) |
 | **Send emails from an AI agent built with [Cloudflare Agents SDK](https://developers.cloudflare.com/agents/)** | `onEmail()` + `replyToEmail()` in Agent class | [sending.md](references/sending.md) |
 | **Send emails from an external app or agent** (Node.js, Go, Python, etc.) | REST API with Bearer token | [rest-api.md](references/rest-api.md) |
+| **Send emails from an existing SMTP-native app** | Authenticated SMTP submission | [smtp.md](references/smtp.md) |
 | **Send emails from a coding agent** (Claude Code, Cursor, Copilot, etc.) | MCP tools, wrangler CLI, or REST API | [cli-and-mcp.md](references/cli-and-mcp.md) |
 | **Receive and process incoming emails** (Email Routing) | Workers `email()` handler | [routing.md](references/routing.md) |
 | **Set up Email Sending or Email Routing** | `wrangler email sending enable` / `wrangler email routing enable`, or Dashboard | [cli-and-mcp.md](references/cli-and-mcp.md) |
@@ -76,6 +77,12 @@ For apps outside Workers, or within Workers if the user explicitly requests it. 
 
 See [rest-api.md](references/rest-api.md) for curl examples, response format, and error handling.
 
+## Quick Start — SMTP Submission
+
+Use SMTP only for existing SMTP-native apps or language libraries. Connect to `smtp.mx.cloudflare.net:465` with implicit TLS, username `api_token`, and a Cloudflare API token with `Email Sending:Edit` as the password.
+
+See [smtp.md](references/smtp.md) for settings and a curl example.
+
 ## Common Mistakes
 
 | Mistake | Why It Happens | Fix |
@@ -91,6 +98,7 @@ See [rest-api.md](references/rest-api.md) for curl examples, response format, an
 | Ignoring the `from` domain requirement | The `from` address must use a domain onboarded to Email Service | Verify the domain first, then send from `anything@that-domain.com` |
 | Using `email` key in REST API `from` object | REST API uses `address` not `email` for `from` object | Use `{ "address": "...", "name": "..." }` for REST, `{ "email": "...", "name": "..." }` for Workers |
 | Using `replyTo` in REST API | REST API uses snake_case field names | Use `reply_to` for REST API, `replyTo` for Workers binding |
+| Using SMTP from Workers | Workers have a native Email Service binding | Use `env.EMAIL.send()` from Workers; reserve SMTP for external SMTP-native apps |
 
 ## References
 
@@ -98,6 +106,7 @@ Read the reference that matches your situation. You don't need all of them.
 
 - **[references/sending.md](references/sending.md)** — Workers binding API, attachments, Agents SDK email. For Workers or Agents SDK.
 - **[references/rest-api.md](references/rest-api.md)** — REST endpoint, curl examples, error handling. For apps NOT on Workers.
+- **[references/smtp.md](references/smtp.md)** — SMTP submission settings. For existing SMTP-native apps.
 - **[references/routing.md](references/routing.md)** — Inbound `email()` handler, forwarding, replying, parsing. For receiving emails.
 - **[references/cli-and-mcp.md](references/cli-and-mcp.md)** — Domain setup, wrangler commands, MCP tools. For first-time setup.
 - **[references/deliverability.md](references/deliverability.md)** — SPF/DKIM/DMARC, bounces, suppressions, best practices.

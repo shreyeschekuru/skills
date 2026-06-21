@@ -46,6 +46,7 @@ Before implementing or debugging a product without a focused skill:
 - Do not rely on module-scope variables for durable state. Use Durable Objects, D1, KV, R2, or external storage based on consistency needs.
 - Keep runtime-bound calls such as `fetch()`, binding access, and secret reads inside handlers or object methods, not module initialization.
 - Node.js APIs require current compatibility guidance. Prefer Workers-native APIs when the runtime feature is available without `nodejs_compat`.
+- For Workers with compatibility date `2026-03-17` or later, binary WebSocket `message` events use `Blob` by default. Set `ws.binaryType = "arraybuffer"` before `accept()` when code expects `ArrayBuffer`, or retrieve the current `websocket_standard_binary_type` compatibility docs. Hibernatable Durable Object `webSocketMessage` handlers still receive binary data as `ArrayBuffer`.
 - For Workers code review, prefer the focused `workers-best-practices` skill.
 
 ### Browser Run
@@ -104,6 +105,7 @@ Before implementing or debugging a product without a focused skill:
 - Choose tenancy deliberately: shared database plus `tenant_id` for global queries and simple operations; per-tenant databases for stronger isolation or scale boundaries. Never derive binding names directly from untrusted tenant input without an allowlist.
 - For global read replication, retrieve current D1 docs before coding. Do not invent a separate replica binding; current docs route replica reads through the D1 Sessions API.
 - Retrieve current docs before using Time Travel, backups, Sessions API, pricing, limits, or beta features.
+- For nested migration layouts such as Drizzle's `migrations/0001_init/migration.sql`, retrieve current `migrations_pattern` docs. The glob is relative to the Wrangler config file, defaults to `${migrations_dir}/*.sql`, and records migration names relative to `migrations_dir`.
 - Store binary/blob data in R2 and keep D1 for relational metadata.
 - Catch uniqueness and constraint errors and translate them into user-meaningful responses.
 
@@ -123,7 +125,8 @@ Before implementing or debugging a product without a focused skill:
 - Retrieve current docs first: `https://developers.cloudflare.com/r2/data-catalog/llms.txt`, `https://developers.cloudflare.com/r2-sql/llms.txt`, and `https://developers.cloudflare.com/pipelines/llms.txt`.
 - Treat this as an analytics/lakehouse stack over R2 data, not an operational request-path database. Use D1, Durable Objects, Hyperdrive, or an external database when the app needs low-latency transactional reads/writes.
 - Check R2 SQL limitations, SQL reference, beta status, and Wrangler/API auth before writing queries. Do not assume full SQL support or a Worker-native R2 SQL binding.
-- For Pipelines, retrieve streams, sinks, SQL, and Wrangler docs before editing config. Validate event shape before sending, use generated bindings/types, and inspect metrics when accepted events do not appear in the sink.
+- For Pipelines, retrieve streams, sinks, SQL, and Wrangler docs before editing config. Current Wrangler config uses `stream` inside each `pipelines` binding; old `pipeline` examples are deprecated even though the runtime API remains `env.MY_PIPELINE.send(...)`.
+- Validate event shape before sending pipeline events, use generated bindings/types, and inspect metrics when accepted events do not appear in the sink.
 - For R2 Data Catalog/Iceberg, design schema evolution, partitions, compaction, and concurrent writes from the current docs. Prefer compatible schema changes and retry conflict-prone commits deliberately.
 
 ### Cache Reserve
@@ -189,8 +192,9 @@ Before implementing or debugging a product without a focused skill:
 - Design steps to be idempotent and restart-safe.
 - Keep step names deterministic. Step names act like durable execution keys.
 - Keep steps granular and self-contained; do not put an entire business process into one giant step.
+- Workflow bindings can include `schedules` so cron runs create Workflow instances directly. Do not add a separate `scheduled()` Worker handler unless the app needs custom trigger logic.
 - Do not rely on mutable state outside step returns. Workflows can hibernate and lose in-memory state.
-- Put side effects inside `step.do()` unless repeating the action after a restart is acceptable.
+- Put side effects inside `step.do()` unless repeating the action after a restart is acceptable. `step.do()` callbacks can receive context such as step name/count, attempt, and retry config; retrieve current types before relying on exact property names.
 - Return serializable step state only. Do not return `Request`, `Response`, `Error`, class instances, functions, locked streams, or already-read streams.
 - Use unique instance IDs deliberately. `create()` can fail for an existing ID within retention; `createBatch()` has different idempotency behavior.
 - Use `NonRetryableError` for permanent validation failures and rollback handlers for compensating actions.
@@ -231,8 +235,15 @@ Before implementing or debugging a product without a focused skill:
 ### Images Binding
 
 - Use the Images binding when a Worker must transform bytes from any source. Use R2 or Images product storage for storage concerns.
+- For hosted Cloudflare Images, prefer `env.IMAGES.hosted` from Workers to upload, list, inspect, stream original bytes, update, or delete hosted images without API tokens.
 - Binding transformations are not automatically cached. Cache or store transformed output deliberately when reuse matters.
 - Local development may use a lower-fidelity implementation; use remote mode or deployed testing for pixel-sensitive output.
+
+### Stream Binding
+
+- Use the Stream binding for video library work from Workers: URL uploads, direct-upload provisioning, signed playback tokens, metadata, captions, downloads, watermarks, and video pipelines.
+- Prefer the binding over Cloudflare REST calls from Workers when managing Stream videos. Use REST or SDKs for external management-plane automation.
+- Store application metadata and permissions outside Stream when the app needs transactional queries or tenant-specific authorization.
 
 ### Media Transformations Binding
 
@@ -261,6 +272,7 @@ Before implementing or debugging a product without a focused skill:
 
 - Enable observability deliberately in config for production debugging.
 - Use structured logs and avoid secret-bearing log fields.
+- Use `tracing.enterSpan()` from `cloudflare:workers` or `ctx.tracing.enterSpan()` for meaningful custom work units after traces are enabled. Attach only low-cardinality, non-secret attributes.
 - Tail logs are diagnostic, not durable audit storage.
 - Use Workers observability for Worker telemetry; use Cloudflare Logs or Log Explorer for account/zone log datasets.
 
@@ -272,6 +284,8 @@ Before implementing or debugging a product without a focused skill:
 - Use Spectrum for non-HTTP TCP/UDP protocols.
 - For private databases from Workers, compare Hyperdrive, TCP sockets, Tunnel, and VPC/private-network patterns against current docs.
 - For Worker access to internal services, distinguish scoped Workers VPC Services from broader Workers VPC Networks before choosing raw TCP sockets.
+- VPC Network bindings support `fetch()` for HTTP and `connect()` for raw TCP to private destinations reachable through Tunnel, Mesh, or Cloudflare WAN. Current `connect()` support is plaintext TCP only.
+- A VPC Network binding with `network_id: "cf1:network"` sends public Internet egress through Cloudflare Gateway policies and logs. Treat this as a security-control path, not just a routing knob.
 - Retrieve current troubleshooting docs when debugging private connectivity: `https://developers.cloudflare.com/workers-vpc/reference/troubleshooting/`, `https://developers.cloudflare.com/workers/runtime-apis/tcp-sockets/#troubleshooting`, and `https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/troubleshoot-tunnels/`.
 - For physical/private interconnects, design high availability from the start; single-link setups are operationally fragile.
 

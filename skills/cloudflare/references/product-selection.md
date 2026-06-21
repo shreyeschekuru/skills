@@ -21,6 +21,7 @@ Load or follow focused skills first when they match:
 | Agents SDK, chat agents, MCP, scheduling | `agents-sdk` |
 | Sandbox SDK, code execution, interpreter environments | `sandbox-sdk` |
 | Transactional email sending or routing | `cloudflare-email-service` |
+| Feature flags, targeting, gradual rollouts | `flagship` |
 | Turnstile setup or CAPTCHA migration | `turnstile-spin` |
 | Cloudflare One or SASE/Zero Trust | `cloudflare-one` or `cloudflare-one-migrations` |
 
@@ -99,7 +100,7 @@ For debugging private connectivity, retrieve the relevant troubleshooting page b
 - Use Workers for Platforms only when customers or tenants deploy code; do not use it for ordinary multitenancy.
 - Use Dynamic Workers for runtime-loaded code inside your own Worker; use Workers for Platforms when external customers manage deployed Worker scripts.
 - Use Browser Run only when a real browser is required; start with `fetch()` for APIs and static HTML.
-- Use Worker-native bindings for Rate Limiting, mTLS, Version Metadata, Images, Media Transformations, AI Search, and Secrets Store instead of inventing REST/API-key paths from Workers.
+- Use Worker-native bindings for Rate Limiting, mTLS, Version Metadata, Images, Media Transformations, Stream, Flagship, AI Search, and Secrets Store instead of inventing REST/API-key paths from Workers.
 
 ## Validation Defaults
 

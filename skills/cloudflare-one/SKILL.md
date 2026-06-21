@@ -50,7 +50,7 @@ Use these to avoid jumping straight to configuration. Ask only the prompts relev
 - Traffic controls: DNS categories, HTTP URL/path inspection, L4 ports/protocols, egress IP requirements, custom lists, and allow/block exceptions. Retrieve [Gateway traffic policy](https://developers.cloudflare.com/cloudflare-one/traffic-policies/) docs for current selectors and order of enforcement.
 - Identity: whether Gateway policies need user or group selectors, and whether users will be authenticated through WARP/IdP context. Check [Gateway identity selectors](https://developers.cloudflare.com/cloudflare-one/traffic-policies/identity-selectors/) and [SCIM provisioning](https://developers.cloudflare.com/cloudflare-one/team-and-resources/users/scim/) when groups are involved.
 - TLS inspection: root CA deployment path, certificate-pinned applications, compliance exceptions, and FIPS requirements. Retrieve [TLS decryption](https://developers.cloudflare.com/cloudflare-one/traffic-policies/http-policies/tls-decryption/) docs before enabling.
-- DLP: sensitive data types, channels to inspect, TLS inspection readiness, DLP profiles, payload logging requirements, and false-positive tolerance. Retrieve [DLP](https://developers.cloudflare.com/cloudflare-one/data-loss-prevention/) docs before creating enforcement.
+- DLP: sensitive data types, AI prompt topics, channels to inspect, TLS inspection readiness, DLP profiles, payload logging requirements, and false-positive tolerance. Retrieve [DLP](https://developers.cloudflare.com/cloudflare-one/data-loss-prevention/) docs before creating enforcement.
 
 ### CASB, Device Posture, and Risk
 
@@ -120,6 +120,7 @@ Use these to avoid jumping straight to configuration. Ask only the prompts relev
 - HTTP Do Not Inspect rules run before HTTP Allow/Block/Isolate behavior. A later block rule will not override an earlier inspection bypass.
 - Certificate-pinned apps need Do Not Inspect exceptions before broad TLS inspection. Deploy the Cloudflare root CA to managed devices before enabling inspection.
 - DLP profiles are detection definitions only. They do nothing until referenced by Gateway HTTP policies or CASB scan settings. Rules with body inspection may be evaluated multiple times in a single pass.
+- Custom AI prompt topics are natural-language concept detectors for supported AI apps through Gateway granular controls. Use custom wordlists or patterns for literal codenames, IDs, or exact keywords.
 - Start DLP with payload logging where appropriate, tune false positives, then block.
 - Gateway Network policies are strict L4 controls. Identity-aware L4 matching requires authenticated device context.
 
