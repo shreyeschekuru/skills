@@ -100,7 +100,7 @@ async email(message, env, ctx) {
 
 ## Parsing Emails
 
-Use [postal-mime](https://www.npmjs.com/package/postal-mime) to parse raw MIME content:
+Use [postal-mime](https://postal-mime.postalsys.com) to parse raw MIME content:
 
 ```typescript
 import PostalMime from "postal-mime";
