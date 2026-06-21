@@ -118,6 +118,21 @@ Before implementing or debugging a product without a focused skill:
 - Treat presigned URLs as bearer tokens. Return expiry metadata to clients and keep expirations short for sensitive operations.
 - For multipart uploads, handle missing or completed upload IDs and abort/cleanup failures explicitly; resumed upload handles do not prove the upload still exists.
 
+### R2 Data Catalog, R2 SQL, And Pipelines
+
+- Retrieve current docs first: `https://developers.cloudflare.com/r2/data-catalog/llms.txt`, `https://developers.cloudflare.com/r2-sql/llms.txt`, and `https://developers.cloudflare.com/pipelines/llms.txt`.
+- Treat this as an analytics/lakehouse stack over R2 data, not an operational request-path database. Use D1, Durable Objects, Hyperdrive, or an external database when the app needs low-latency transactional reads/writes.
+- Check R2 SQL limitations, SQL reference, beta status, and Wrangler/API auth before writing queries. Do not assume full SQL support or a Worker-native R2 SQL binding.
+- For Pipelines, retrieve streams, sinks, SQL, and Wrangler docs before editing config. Validate event shape before sending, use generated bindings/types, and inspect metrics when accepted events do not appear in the sink.
+- For R2 Data Catalog/Iceberg, design schema evolution, partitions, compaction, and concurrent writes from the current docs. Prefer compatible schema changes and retry conflict-prone commits deliberately.
+
+### Cache Reserve
+
+- Retrieve current Cache Reserve and cache rule docs before configuring eligibility, purges, or billing-sensitive behavior: `https://developers.cloudflare.com/cache/llms.txt`.
+- Use Cache Reserve for persistent CDN cache of cacheable origin responses, not as application object storage.
+- Check cacheability inputs before debugging misses: cache rules, response headers, content length, cookies, `Vary`, range requests, R2 public buckets, and Orange-to-Orange paths.
+- Treat purge and clear-data behavior as product-specific. Retrieve docs before promising immediate removal from persistent cache.
+
 ### Hyperdrive
 
 - Use Hyperdrive for existing Postgres/MySQL from Workers; use D1 for edge-native SQLite.
@@ -259,6 +274,14 @@ Before implementing or debugging a product without a focused skill:
 - For Worker access to internal services, distinguish scoped Workers VPC Services from broader Workers VPC Networks before choosing raw TCP sockets.
 - Retrieve current troubleshooting docs when debugging private connectivity: `https://developers.cloudflare.com/workers-vpc/reference/troubleshooting/`, `https://developers.cloudflare.com/workers/runtime-apis/tcp-sockets/#troubleshooting`, and `https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/troubleshoot-tunnels/`.
 - For physical/private interconnects, design high availability from the start; single-link setups are operationally fragile.
+
+### Realtime And TURN
+
+- Retrieve `https://developers.cloudflare.com/realtime/llms.txt` before choosing RealtimeKit, SFU, TURN, Stream, or Durable Objects/WebSockets.
+- Use Realtime SFU/RealtimeKit/TURN for WebRTC audio, video, data channels, and restrictive-network relay. Use Stream for video-on-demand, and Durable Objects/WebSockets for stateful chat or collaboration without media.
+- Keep Realtime API tokens and app secrets server-side. Create sessions, participants, and TURN credentials from Workers or another backend, not from browser code.
+- Validate user identity, permissions, session IDs, and track IDs before creating or subscribing to media. Rate limit session creation endpoints.
+- Retrieve current network, pricing, and TURN docs before promising connectivity through restrictive firewalls or estimating media cost.
 
 ### Rate Limiting Binding
 

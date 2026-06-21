@@ -39,6 +39,7 @@ Load or follow focused skills first when they match:
 | Data lake tables in object storage | R2 Data Catalog | Plain object storage is enough, or the workload is transactional rather than analytical. |
 | SQL over R2/Iceberg data | R2 SQL | The data is small, operational, or latency-sensitive; use D1, Analytics Engine, or an external warehouse. |
 | Streaming ingest into R2/Iceberg | Pipelines | You only need a task queue; use Queues, or use Analytics Engine for custom metrics. |
+| Persistent CDN cache for cacheable origin assets | Cache Reserve | The workload needs object storage, range-heavy media delivery, or application-owned metadata; use R2, Stream, or normal cache rules. |
 | Background jobs | Queues | Multi-step durable orchestration with checkpoints fits Workflows. |
 | Multi-step durable business process | Workflows | One-off async fanout may be simpler with Queues. |
 | Lightweight AI-generated or untrusted code execution | Dynamic Workers | You need filesystem/process isolation, shell, or package installs; use Sandbox SDK or Containers. |
@@ -93,6 +94,7 @@ For debugging private connectivity, retrieve the relevant troubleshooting page b
 - Use Terraform/Pulumi for declarative infrastructure ownership, not for high-frequency app deploys unless the team already owns that flow.
 - Use GraphQL Analytics API for Cloudflare product analytics; use Analytics Engine for metrics your Worker writes.
 - Use R2 for binary/blob payloads; pair it with D1 or Durable Objects for transactional metadata, or KV for read-heavy metadata where eventual consistency is acceptable.
+- For R2 Data Catalog, R2 SQL, Pipelines, Cache Reserve, and Realtime, retrieve the product `llms.txt` or Markdown docs before assuming API shape, SQL support, limits, beta status, cache eligibility, or network/security behavior.
 - Use Durable Objects for coordination and consistency boundaries; use Queues or Workflows for asynchronous work.
 - Use Workers for Platforms only when customers or tenants deploy code; do not use it for ordinary multitenancy.
 - Use Dynamic Workers for runtime-loaded code inside your own Worker; use Workers for Platforms when external customers manage deployed Worker scripts.

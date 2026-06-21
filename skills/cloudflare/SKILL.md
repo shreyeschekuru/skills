@@ -48,11 +48,14 @@ When retrieved docs and local skill guidance disagree, trust the retrieved docs 
 | Turnstile setup or CAPTCHA migration | `turnstile-spin` | `https://developers.cloudflare.com/turnstile/` |
 | Feature flags, targeting, gradual rollouts | Flagship docs | `https://developers.cloudflare.com/flagship/` |
 | KV, D1, R2, Queues, Vectorize, Hyperdrive | Product docs plus `wrangler` | `https://developers.cloudflare.com/` |
+| R2 Data Catalog, R2 SQL, Pipelines, lakehouse analytics | Product docs plus `platform-gotchas.md` | `https://developers.cloudflare.com/r2-sql/`, `https://developers.cloudflare.com/pipelines/`, `https://developers.cloudflare.com/r2/data-catalog/` |
+| Cache Reserve and CDN cache behavior | Cache docs plus `platform-gotchas.md` | `https://developers.cloudflare.com/cache/` |
 | Artifacts, Agent Memory, Images, Media Transformations, Rate Limiting, mTLS, Version Metadata, Secrets Store | Product docs plus `wrangler` and `platform-gotchas.md` | `https://developers.cloudflare.com/llms.txt` |
 | Workers AI model inference | Workers AI docs plus Workers bindings | `https://developers.cloudflare.com/workers-ai/` |
 | AI provider routing, caching, logs, fallback | AI Gateway docs | `https://developers.cloudflare.com/ai-gateway/` |
 | Managed RAG, semantic search, agent search endpoint | AI Search docs | `https://developers.cloudflare.com/ai-search/` |
 | Tunnel, Magic WAN, WARP, Access, Gateway, DLP, CASB | `cloudflare-one` | `https://developers.cloudflare.com/cloudflare-one/` |
+| Realtime audio/video, SFU, TURN, RealtimeKit | Realtime docs plus `platform-gotchas.md` | `https://developers.cloudflare.com/realtime/` |
 | Private Worker access to internal HTTP/TCP services | Workers VPC docs plus product chooser | `https://developers.cloudflare.com/workers-vpc/` |
 | WAF, DDoS, Bot Management, API Shield | Product docs and Cloudflare API schema | `https://developers.cloudflare.com/` |
 | Terraform or Pulumi | Provider docs plus Cloudflare API schema | `https://developers.cloudflare.com/terraform/` |

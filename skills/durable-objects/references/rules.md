@@ -88,6 +88,8 @@ const row = this.ctx.storage.sql.exec<{ count: number }>(
 ).one();
 ```
 
+SQLite storage uses JavaScript values at the API boundary. Retrieve current storage docs before relying on exact type behavior. When storing externally generated 64-bit IDs such as Snowflake IDs, prefer `TEXT`; JavaScript numbers cannot represent every 64-bit integer safely.
+
 ### Migrations
 
 **Note:** `PRAGMA user_version` is **not supported** in Durable Objects SQLite storage. Use a `_sql_schema_migrations` table instead:
@@ -184,6 +186,13 @@ async processItem(id: string) {
 ```
 
 **Solution**: Use optimistic locking (version numbers) or `transaction()`.
+
+### Storage Operation Edges
+
+- Input gates serialize storage operations across separate events, not every concurrent operation you start inside one event. Avoid `Promise.all()` over related storage reads/writes unless the operations are independent.
+- Use `transactionSync()` only for synchronous work. Use the async transaction API when the callback must await.
+- Use `allowConcurrency` only for reads that do not need consistency with other in-flight operations.
+- If cleanup must remove both data and scheduled work, call `deleteAlarm()` as well as `deleteAll()`. Verify current storage docs for backend-specific semantics.
 
 ### blockConcurrencyWhile()
 
