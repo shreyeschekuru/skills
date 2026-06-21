@@ -79,15 +79,13 @@ Short, retrieval-first skills for [Cloudflare One](https://developers.cloudflare
 
 ## MCP Servers
 
-This plugin includes [Cloudflare's remote MCP servers](https://developers.cloudflare.com/agents/model-context-protocol/cloudflare/servers-for-cloudflare/) for enhanced functionality:
+This plugin includes Cloudflare's main [remote MCP server](https://developers.cloudflare.com/agents/model-context-protocol/cloudflare/servers-for-cloudflare/) for enhanced functionality:
 
 | Server | Purpose |
 |--------|---------|
-| cloudflare-api | Manage Cloudflare account resources, zones, and settings |
-| cloudflare-docs | Up-to-date Cloudflare documentation and reference |
-| cloudflare-bindings | Build Workers applications with storage, AI, and compute primitives |
-| cloudflare-builds | Manage and get insights into Workers builds |
-| cloudflare-observability | Debug and analyze application logs and analytics |
+| cloudflare-api | Access the Cloudflare API through the Code Mode MCP server |
+
+Cloudflare also publishes product-specific MCP servers for docs, Workers bindings, builds, observability, Radar, Browser Run, and more. This plugin intentionally bundles only the main `cloudflare-api` server.
 
 ## Resources
 
