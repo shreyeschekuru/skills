@@ -7,6 +7,7 @@
 - Storage And Data
 - Async And Orchestration
 - AI And Search
+- Media And Content
 - Analytics And Observability
 - Networking And Security
 - Deployment And IaC
@@ -205,8 +206,25 @@ Before implementing or debugging a product without a focused skill:
 ### AI Search
 
 - Use AI Search for managed RAG when the source is a website, R2 bucket, or uploaded documents and managed indexing/retrieval is enough.
+- Distinguish namespace bindings from direct instance bindings. Retrieve current `ai_search_namespaces` and `ai_search` config docs before editing Wrangler config.
+- Use namespace-level Wrangler commands when creating or managing AI Search namespaces for apps or tenants.
 - Retrieve current AI Search indexing and sync behavior before promising freshness, deletion behavior, or crawl timing.
 - For custom ingestion, scoring, or metadata schema control beyond AI Search settings, use Vectorize plus your own retrieval pipeline.
+
+## Media And Content
+
+### Images Binding
+
+- Use the Images binding when a Worker must transform bytes from any source. Use R2 or Images product storage for storage concerns.
+- Binding transformations are not automatically cached. Cache or store transformed output deliberately when reuse matters.
+- Local development may use a lower-fidelity implementation; use remote mode or deployed testing for pixel-sensitive output.
+
+### Media Transformations Binding
+
+- Use Media Transformations for Worker-side video/audio transforms, frame extraction, audio extraction, and protected/R2-backed media processing.
+- A binding `input()` result is single-use; do not reuse it across multiple transforms.
+- Binding output is not automatically cached. Persist to R2 or cache intentionally if repeated delivery matters.
+- Local development requires remote mode for real behavior and can touch billable resources.
 
 ## Analytics And Observability
 
@@ -242,6 +260,21 @@ Before implementing or debugging a product without a focused skill:
 - Retrieve current troubleshooting docs when debugging private connectivity: `https://developers.cloudflare.com/workers-vpc/reference/troubleshooting/`, `https://developers.cloudflare.com/workers/runtime-apis/tcp-sockets/#troubleshooting`, and `https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/troubleshoot-tunnels/`.
 - For physical/private interconnects, design high availability from the start; single-link setups are operationally fragile.
 
+### Rate Limiting Binding
+
+- Use the Rate Limiting binding for in-code user, tenant, route, or API-key limits after a Worker starts. Use WAF rate limiting rules when traffic should be limited before Worker execution.
+- Choose stable keys such as user IDs, tenant IDs, route IDs, or API keys. Avoid IP/location keys unless the broad grouping is intentional.
+- Rate limits are per Cloudflare location and intentionally permissive/eventually consistent. Do not use them for accurate accounting.
+- Bindings with the same namespace ID share counters across Workers in the same account.
+- Rate limiting bindings may not appear in the dashboard; emit Workers logs or Analytics Engine events for monitoring.
+
+### mTLS Binding
+
+- Use the mTLS binding when a Worker must present a client certificate to an upstream service.
+- Upload certificate/key material with Wrangler or the current API; never commit private keys.
+- Current docs warn that Worker mTLS cannot be used for requests to services on proxied Cloudflare zones; expect 520 errors there.
+- The binding behaves like a Fetcher. Use generated types and call `env.MY_CERT.fetch()`.
+
 ### WAF, API Shield, Bot Management
 
 - Stage risky rules in log/simulate or narrow scopes before blocking production traffic.
@@ -269,6 +302,14 @@ Before implementing or debugging a product without a focused skill:
 - Bindings and environment variables differ between Pages Functions, Workers, and local dev.
 - Do not start new Workers Sites projects; use Workers static assets or Pages.
 - C3/scaffold commands change; retrieve current create command and platform flags before generating.
+
+### Temporary Deployments
+
+- `wrangler deploy --temporary` is for unauthenticated AI-agent or prototype deploys, not production or CI.
+- Start with normal deploy; if Wrangler reports missing credentials and suggests `--temporary`, rerun with that flag.
+- Temporary preview accounts expire if not claimed. Return the live URL and claim URL promptly.
+- Treat claim URLs as sensitive because they grant ownership of the temporary preview account.
+- Temporary deployments support only a subset of products; retrieve current claim deployment docs before using advanced bindings.
 
 ## Local Development
 
