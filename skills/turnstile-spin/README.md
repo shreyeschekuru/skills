@@ -20,16 +20,12 @@ This is a mirror of the canonical docs page at [`developers.cloudflare.com/turns
 
 ## How agents load it
 
-Agents that load skill bundles from `github.com/cloudflare/skills` will pick this up automatically. For agents that load skills out of a local directory:
+Agents that load skill bundles from `github.com/cloudflare/skills` will pick this up automatically. For agents that load skills out of a local directory, install the whole skill folder so the scripts, references, and Worker template are available:
 
 ```sh
-# Claude Code
-mkdir -p .claude/skills/turnstile-spin && \
-  curl -sSL https://developers.cloudflare.com/turnstile/spin.md \
-  -o .claude/skills/turnstile-spin/SKILL.md
-
-# Or, install the whole skills bundle into a global location
+# Claude Code local directory install
 git clone https://github.com/cloudflare/skills ~/.config/cloudflare-skills
+mkdir -p ~/.claude/skills
 ln -s ~/.config/cloudflare-skills/skills/turnstile-spin ~/.claude/skills/turnstile-spin
 ```
 
@@ -42,5 +38,5 @@ The canonical source of truth is `src/content/docs/turnstile/spin/index.mdx` in 
 ## Related
 
 - [Canonical docs page](https://developers.cloudflare.com/turnstile/spin/)
-- [`cloudflare/turnstile-siteverify`](https://github.com/cloudflare/turnstile-siteverify) - the managed Worker that this skill deploys
+- [`templates/worker/`](./templates/worker/) - the managed Worker template that this skill deploys
 - [`cloudflare/skills`](https://github.com/cloudflare/skills) - root index for all Cloudflare agent skills
