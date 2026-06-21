@@ -13,7 +13,6 @@ Prefer current sources before exact API shapes, config fields, limits, or pricin
 
 | Topic | URL |
 | --- | --- |
-| Docs index | https://developers.cloudflare.com/dynamic-workers/llms.txt |
 | Overview | https://developers.cloudflare.com/dynamic-workers/ |
 | Getting started | https://developers.cloudflare.com/dynamic-workers/getting-started/ |
 | API reference | https://developers.cloudflare.com/dynamic-workers/api-reference/ |

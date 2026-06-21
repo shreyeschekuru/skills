@@ -13,7 +13,6 @@ Prefer current sources before exact APIs, limits, or pricing:
 
 | Topic | URL |
 | --- | --- |
-| Docs index | https://developers.cloudflare.com/workflows/llms.txt |
 | Overview | https://developers.cloudflare.com/workflows/ |
 | Getting started | https://developers.cloudflare.com/workflows/get-started/guide/ |
 | Rules of Workflows | https://developers.cloudflare.com/workflows/build/rules-of-workflows/ |

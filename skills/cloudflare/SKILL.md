@@ -14,7 +14,7 @@ Retrieve current Cloudflare information before relying on exact API fields, CLI 
 Prefer sources in this order:
 
 1. Cloudflare MCP/docs tools when available.
-2. The relevant page under `https://developers.cloudflare.com/`.
+2. The relevant product documentation page under `https://developers.cloudflare.com/`.
 3. Project-local source of truth: `wrangler.jsonc`, generated `worker-configuration.d.ts`, `node_modules/wrangler/config-schema.json`, package versions, tests, and deployed configuration inspected through Wrangler or the Cloudflare API.
 
 When retrieved docs and local skill guidance disagree, trust the retrieved docs and generated/project-local types.
@@ -50,7 +50,9 @@ When retrieved docs and local skill guidance disagree, trust the retrieved docs 
 | KV, D1, R2, Queues, Vectorize, Hyperdrive | Product docs plus `wrangler` | `https://developers.cloudflare.com/` |
 | R2 Data Catalog, R2 SQL, Pipelines, lakehouse analytics | Product docs plus `platform-gotchas.md` | `https://developers.cloudflare.com/r2-sql/`, `https://developers.cloudflare.com/pipelines/`, `https://developers.cloudflare.com/r2/data-catalog/` |
 | Cache Reserve and CDN cache behavior | Cache docs plus `platform-gotchas.md` | `https://developers.cloudflare.com/cache/` |
-| Artifacts, Agent Memory, Images, Stream, Media Transformations, Rate Limiting, mTLS, Version Metadata, Secrets Store | Product docs plus `wrangler` and `platform-gotchas.md` | `https://developers.cloudflare.com/llms.txt` |
+| Artifacts and Agent Memory | Product docs plus `wrangler` and `platform-gotchas.md` | `https://developers.cloudflare.com/artifacts/`, `https://developers.cloudflare.com/agent-memory/` |
+| Images, Stream, Media Transformations | Product docs plus `platform-gotchas.md` | `https://developers.cloudflare.com/images/`, `https://developers.cloudflare.com/stream/`, `https://developers.cloudflare.com/stream/transform-videos/` |
+| Rate Limiting, mTLS, Version Metadata, Secrets Store | Workers binding docs plus `wrangler` and `platform-gotchas.md` | `https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/`, `https://developers.cloudflare.com/workers/runtime-apis/bindings/mtls/`, `https://developers.cloudflare.com/workers/runtime-apis/bindings/version-metadata/`, `https://developers.cloudflare.com/secrets-store/` |
 | Workers AI model inference | Workers AI docs plus Workers bindings | `https://developers.cloudflare.com/workers-ai/` |
 | AI provider routing, caching, logs, fallback | AI Gateway docs | `https://developers.cloudflare.com/ai-gateway/` |
 | Managed RAG, semantic search, agent search endpoint | AI Search docs | `https://developers.cloudflare.com/ai-search/` |

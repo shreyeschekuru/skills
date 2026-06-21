@@ -122,7 +122,7 @@ Before implementing or debugging a product without a focused skill:
 
 ### R2 Data Catalog, R2 SQL, And Pipelines
 
-- Retrieve current docs first: `https://developers.cloudflare.com/r2/data-catalog/llms.txt`, `https://developers.cloudflare.com/r2-sql/llms.txt`, and `https://developers.cloudflare.com/pipelines/llms.txt`.
+- Retrieve current docs first: `https://developers.cloudflare.com/r2/data-catalog/`, `https://developers.cloudflare.com/r2-sql/`, and `https://developers.cloudflare.com/pipelines/`.
 - Treat this as an analytics/lakehouse stack over R2 data, not an operational request-path database. Use D1, Durable Objects, Hyperdrive, or an external database when the app needs low-latency transactional reads/writes.
 - Check R2 SQL limitations, SQL reference, beta status, and Wrangler/API auth before writing queries. Do not assume full SQL support or a Worker-native R2 SQL binding.
 - For Pipelines, retrieve streams, sinks, SQL, and Wrangler docs before editing config. Current Wrangler config uses `stream` inside each `pipelines` binding; old `pipeline` examples are deprecated even though the runtime API remains `env.MY_PIPELINE.send(...)`.
@@ -131,7 +131,7 @@ Before implementing or debugging a product without a focused skill:
 
 ### Cache Reserve
 
-- Retrieve current Cache Reserve and cache rule docs before configuring eligibility, purges, or billing-sensitive behavior: `https://developers.cloudflare.com/cache/llms.txt`.
+- Retrieve current Cache Reserve and cache rule docs before configuring eligibility, purges, or billing-sensitive behavior: `https://developers.cloudflare.com/cache/`.
 - Use Cache Reserve for persistent CDN cache of cacheable origin responses, not as application object storage.
 - Check cacheability inputs before debugging misses: cache rules, response headers, content length, cookies, `Vary`, range requests, R2 public buckets, and Orange-to-Orange paths.
 - Treat purge and clear-data behavior as product-specific. Retrieve docs before promising immediate removal from persistent cache.
@@ -291,7 +291,7 @@ Before implementing or debugging a product without a focused skill:
 
 ### Realtime And TURN
 
-- Retrieve `https://developers.cloudflare.com/realtime/llms.txt` before choosing RealtimeKit, SFU, TURN, Stream, or Durable Objects/WebSockets.
+- Retrieve current Realtime docs before choosing RealtimeKit, SFU, TURN, Stream, or Durable Objects/WebSockets: `https://developers.cloudflare.com/realtime/`.
 - Use Realtime SFU/RealtimeKit/TURN for WebRTC audio, video, data channels, and restrictive-network relay. Use Stream for video-on-demand, and Durable Objects/WebSockets for stateful chat or collaboration without media.
 - Keep Realtime API tokens and app secrets server-side. Create sessions, participants, and TURN credentials from Workers or another backend, not from browser code.
 - Validate user identity, permissions, session IDs, and track IDs before creating or subscribing to media. Rate limit session creation endpoints.

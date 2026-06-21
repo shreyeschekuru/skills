@@ -13,7 +13,6 @@ Prefer current sources before exact APIs, command flags, limits, or pricing:
 
 | Topic | URL |
 | --- | --- |
-| Docs index | https://developers.cloudflare.com/browser-run/llms.txt |
 | Overview | https://developers.cloudflare.com/browser-run/ |
 | Get started | https://developers.cloudflare.com/browser-run/get-started/ |
 | Quick Actions | https://developers.cloudflare.com/browser-run/quick-actions/ |

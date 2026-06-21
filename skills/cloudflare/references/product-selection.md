@@ -95,7 +95,7 @@ For debugging private connectivity, retrieve the relevant troubleshooting page b
 - Use Terraform/Pulumi for declarative infrastructure ownership, not for high-frequency app deploys unless the team already owns that flow.
 - Use GraphQL Analytics API for Cloudflare product analytics; use Analytics Engine for metrics your Worker writes.
 - Use R2 for binary/blob payloads; pair it with D1 or Durable Objects for transactional metadata, or KV for read-heavy metadata where eventual consistency is acceptable.
-- For R2 Data Catalog, R2 SQL, Pipelines, Cache Reserve, and Realtime, retrieve the product `llms.txt` or Markdown docs before assuming API shape, SQL support, limits, beta status, cache eligibility, or network/security behavior.
+- For R2 Data Catalog, R2 SQL, Pipelines, Cache Reserve, and Realtime, retrieve the relevant product docs before assuming API shape, SQL support, limits, beta status, cache eligibility, or network/security behavior.
 - Use Durable Objects for coordination and consistency boundaries; use Queues or Workflows for asynchronous work.
 - Use Workers for Platforms only when customers or tenants deploy code; do not use it for ordinary multitenancy.
 - Use Dynamic Workers for runtime-loaded code inside your own Worker; use Workers for Platforms when external customers manage deployed Worker scripts.

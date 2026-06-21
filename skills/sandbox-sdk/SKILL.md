@@ -18,14 +18,27 @@ docker info  # Must succeed - Docker required for local dev
 
 Your knowledge of the Sandbox SDK may be outdated. **Prefer retrieval over pre-training** for any Sandbox SDK task.
 
-| Resource | URL |
-|----------|-----|
-| Docs | https://developers.cloudflare.com/sandbox/ |
-| API Reference | https://developers.cloudflare.com/sandbox/api/ |
-| Examples | https://github.com/cloudflare/sandbox-sdk/tree/main/examples |
-| Get Started | https://developers.cloudflare.com/sandbox/get-started/ |
+| Resource | URL | Use for |
+|----------|-----|---------|
+| Overview | https://developers.cloudflare.com/sandbox/ | Product fit, architecture, feature map |
+| Get Started | https://developers.cloudflare.com/sandbox/get-started/ | First Worker setup |
+| API Reference | https://developers.cloudflare.com/sandbox/api/ | Current method signatures and options |
+| Examples | https://github.com/cloudflare/sandbox-sdk/tree/main/examples | Complete runnable patterns |
 
-When implementing features, fetch the relevant doc page or example first.
+When implementing features, fetch the relevant docs page or example first.
+
+### Retrieval Map
+
+| Need | Fetch |
+|------|-------|
+| Commands, background processes, streaming output | `https://developers.cloudflare.com/sandbox/api/commands/`, `https://developers.cloudflare.com/sandbox/guides/execute-commands/`, `https://developers.cloudflare.com/sandbox/guides/background-processes/`, `https://developers.cloudflare.com/sandbox/guides/streaming-output/` |
+| File operations, file watching, project workspaces | `https://developers.cloudflare.com/sandbox/api/files/`, `https://developers.cloudflare.com/sandbox/guides/manage-files/`, `https://developers.cloudflare.com/sandbox/api/file-watching/` |
+| Code interpreter and AI-generated code | `https://developers.cloudflare.com/sandbox/api/interpreter/`, `https://developers.cloudflare.com/sandbox/guides/code-execution/` |
+| Preview URLs, tunnels, exposed services, production domains | `https://developers.cloudflare.com/sandbox/api/tunnels/`, `https://developers.cloudflare.com/sandbox/api/ports/`, `https://developers.cloudflare.com/sandbox/concepts/preview-urls/`, `https://developers.cloudflare.com/sandbox/guides/expose-services/`, `https://developers.cloudflare.com/sandbox/guides/production-deployment/` |
+| Sessions, browser terminals, WebSockets | `https://developers.cloudflare.com/sandbox/api/sessions/`, `https://developers.cloudflare.com/sandbox/concepts/sessions/`, `https://developers.cloudflare.com/sandbox/api/terminal/`, `https://developers.cloudflare.com/sandbox/guides/browser-terminals/`, `https://developers.cloudflare.com/sandbox/guides/websocket-connections/` |
+| Wrangler config, Dockerfiles, options, transports | `https://developers.cloudflare.com/sandbox/configuration/wrangler/`, `https://developers.cloudflare.com/sandbox/configuration/dockerfile/`, `https://developers.cloudflare.com/sandbox/configuration/sandbox-options/`, `https://developers.cloudflare.com/sandbox/configuration/transport/` |
+| Persistent storage, R2 mounts, Workers binding access, outbound API proxying | `https://developers.cloudflare.com/sandbox/api/storage/`, `https://developers.cloudflare.com/sandbox/guides/mount-buckets/`, `https://developers.cloudflare.com/sandbox/guides/workers-connections/`, `https://developers.cloudflare.com/sandbox/guides/outbound-traffic/` |
+| Lifecycle, security, limits, pricing, deprecations | `https://developers.cloudflare.com/sandbox/concepts/sandboxes/`, `https://developers.cloudflare.com/sandbox/concepts/security/`, `https://developers.cloudflare.com/sandbox/platform/limits/`, `https://developers.cloudflare.com/sandbox/platform/pricing/`, `https://developers.cloudflare.com/sandbox/guides/2026-deprecation/` |
 
 ## Required Configuration
 

@@ -13,7 +13,7 @@ Your Flagship knowledge may be outdated. Retrieve current docs before exact API 
 
 | Topic | URL |
 | --- | --- |
-| Docs index | https://developers.cloudflare.com/flagship/llms.txt |
+| Overview | https://developers.cloudflare.com/flagship/ |
 | Workers binding | https://developers.cloudflare.com/flagship/binding/ |
 | OpenFeature SDKs | https://developers.cloudflare.com/flagship/sdk/ |
 | API reference | https://developers.cloudflare.com/api/resources/flagship/ |
