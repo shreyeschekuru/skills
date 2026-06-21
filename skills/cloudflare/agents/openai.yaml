@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cloudflare Platform"
+  short_description: "Route broad Cloudflare platform work"
+  default_prompt: "Use $cloudflare to route this Cloudflare platform task to the right current docs and focused skill."

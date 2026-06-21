@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agents SDK"
+  short_description: "Build stateful Cloudflare agents"
+  default_prompt: "Use $agents-sdk to build or review a Cloudflare Agents SDK application."
