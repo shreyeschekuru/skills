@@ -1,12 +1,5 @@
 # Product Selection
 
-## Contents
-- Retrieval Rule
-- Prefer Focused Skills
-- Common Choices
-- Product Fit Notes
-- Validation Defaults
-
 Use this file when the user asks a broad Cloudflare architecture, storage, compute, AI, networking, security, analytics, or deployment question and the right product is not obvious.
 
 ## Retrieval Rule

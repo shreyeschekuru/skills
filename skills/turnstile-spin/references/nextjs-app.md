@@ -1,10 +1,5 @@
 # Next.js (App Router)
 
-## Contents
-- Variant: Server Action
-- Substitutions
-
-
 For `app/`-directory Next.js projects. The widget needs to run on the client, so the page or component must be `"use client"`.
 
 ```tsx title="app/signup/page.tsx"
