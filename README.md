@@ -47,6 +47,7 @@ Commands are user-invocable slash commands that you explicitly call.
 |---------|-------------|
 | `/cloudflare:build-agent` | Build an AI agent on Cloudflare using the Agents SDK |
 | `/cloudflare:build-mcp` | Build an MCP server on Cloudflare |
+| `/cloudflare:build-think-agent` | Build a Cloudflare agent using `@cloudflare/think` — minimal boilerplate, automatic tool loops |
 
 ## Skills
 
