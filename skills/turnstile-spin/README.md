@@ -29,11 +29,13 @@ mkdir -p ~/.claude/skills
 ln -s ~/.config/cloudflare-skills/skills/turnstile-spin ~/.claude/skills/turnstile-spin
 ```
 
+If you only need the canonical docs page as Markdown, use `https://developers.cloudflare.com/turnstile/spin/index.md`. The full skill bundle is preferred for reusable local installs because `SKILL.md` depends on bundled scripts, references, and templates.
+
 For other agents, see Step 12 in [`SKILL.md`](./SKILL.md#conversation-flow).
 
 ## Sync with the docs page
 
-The canonical source of truth is `src/content/docs/turnstile/spin/index.mdx` in the `cloudflare-docs` repo. This skill mirrors that content with the JSX stripped out. CI keeps them in sync on each docs release; if you are hand-editing, mirror your change to both places.
+The canonical source of truth is [`src/content/docs/turnstile/spin.mdx`](https://github.com/cloudflare/cloudflare-docs/blob/production/src/content/docs/turnstile/spin.mdx) in the `cloudflare-docs` repo. This skill mirrors that content with the JSX stripped out. CI keeps them in sync on each docs release; if you are hand-editing, mirror your change to both places.
 
 ## Related
 
