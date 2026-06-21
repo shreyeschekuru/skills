@@ -40,7 +40,7 @@ mkdir -p /tmp/workers-types-latest && \
 | Rule | Summary |
 |------|---------|
 | Compatibility date | Set `compatibility_date` to today on new projects; update periodically on existing ones |
-| nodejs_compat | Enable the `nodejs_compat` flag — many libraries depend on Node.js built-ins |
+| nodejs_compat | Add `nodejs_compat` only when the app or dependencies need Node.js built-ins |
 | wrangler types | Run `wrangler types` to generate `Env` — never hand-write binding interfaces |
 | Secrets | Use `wrangler secret put`, never hardcode secrets in config or source |
 | wrangler.jsonc | Use JSONC config for non-secret settings — newer features are JSON-only |
@@ -60,6 +60,7 @@ mkdir -p /tmp/workers-types-latest && \
 | Queues & Workflows | Move async/background work off the critical path |
 | Service bindings | Use service bindings for Worker-to-Worker calls — not public HTTP |
 | Hyperdrive | Always use Hyperdrive for external PostgreSQL/MySQL connections |
+| Rate limiting | Use the Rate Limiting binding for in-code user/tenant/route limits |
 
 ### Observability
 
@@ -90,6 +91,7 @@ mkdir -p /tmp/workers-types-latest && \
 | `Math.random()` for tokens/IDs | Predictable, not cryptographically secure |
 | Bare `fetch()` without `await` or `waitUntil` | Floating promise — dropped result, swallowed error |
 | Module-level mutable variables for request state | Cross-request data leaks, stale state, I/O errors |
+| Module-level clients derived from bindings/secrets | Binding-only deploys can reuse isolates and keep stale credentials |
 | Cloudflare REST API from inside a Worker | Unnecessary network hop, auth overhead, added latency |
 | `ctx.passThroughOnException()` as error handling | Hides bugs, makes debugging impossible |
 | Hand-written `Env` interface | Drifts from actual wrangler config bindings |
@@ -116,7 +118,9 @@ mkdir -p /tmp/workers-types-latest && \
 This skill covers Workers-specific best practices and code review. For related topics:
 
 - **Durable Objects**: load the `durable-objects` skill
-- **Workflows**: see [Rules of Workflows](https://developers.cloudflare.com/workflows/build/rules-of-workflows/)
+- **Workflows**: load the `workflows` skill
+- **Browser Run**: load the `browser-run` skill
+- **Dynamic Workers**: load the `dynamic-workers` skill
 - **Wrangler CLI commands**: load the `wrangler` skill
 
 ## Principles

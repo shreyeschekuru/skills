@@ -1,6 +1,6 @@
 ---
 name: wrangler
-description: Use Cloudflare Wrangler for Workers and Cloudflare resource workflows. Load before running or writing Wrangler commands, editing wrangler.jsonc, deploying Workers, generating types, managing secrets, tailing logs, or creating KV, R2, D1, Queues, Vectorize, Workflows, Hyperdrive, Containers, Workers AI, Pages, Pipelines, or Secrets Store resources.
+description: Use Cloudflare Wrangler for Workers and Cloudflare resource workflows. Load before running or writing Wrangler commands, editing wrangler.jsonc, deploying Workers, temporary deploys, generating types, managing secrets, tailing logs, or creating KV, R2, D1, Queues, Vectorize, Workflows, Hyperdrive, Containers, Workers AI, Pages, Pipelines, Browser Run, AI Search, Workers VPC, mTLS, Artifacts, Agent Memory, or Secrets Store resources.
 ---
 
 # Wrangler CLI
@@ -35,6 +35,7 @@ When docs, schema, and generated types disagree, trust the project-local Wrangle
 | New Workers app | `npm create cloudflare@latest` or the repo's existing scaffold command |
 | Local dev | `npx wrangler dev` |
 | Deploy | `npx wrangler deploy` |
+| Temporary deploy for unauthenticated prototypes | `npx wrangler deploy --temporary` only after Wrangler suggests it or the docs confirm support |
 | Dry run deploy | `npx wrangler deploy --dry-run` |
 | Generate types | `npx wrangler types` |
 | Auth/account check | `npx wrangler whoami` |
@@ -52,8 +53,12 @@ Use environment flags only after confirming the project defines the target envir
 - Add `nodejs_compat` only when the app or dependencies need Node.js built-ins.
 - Do not hand-write Worker binding interfaces in TypeScript; regenerate types instead.
 - Keep non-secret config in `vars`; keep secrets in Wrangler secrets or platform secret storage.
+- Use `secrets.required` to declare required secrets when the project relies on deploy-time validation and generated types.
 - Match binding names in config to code and generated types.
+- Binding arrays are often non-inheritable across Wrangler environments. Repeat bindings such as `vars`, KV, D1, R2, AI Search, Vectorize, service bindings, Queues, Workflows, tail consumers, required secrets, and Secrets Store entries in each environment that needs them.
 - For Durable Objects, never edit old migration tags; add a new migration tag.
+- Automatic resource provisioning can create KV, R2, and D1 resources when IDs are omitted, but generated IDs may be written back only for local CLI deploy flows. Inspect docs before relying on dashboard/Git deploys to update source config.
+- Frameworks and build tools may redirect Wrangler to generated config under `.wrangler/deploy/config.json`; inspect generated config before diagnosing deploy/dev behavior.
 - For local development with real remote resources, set per-binding `remote: true` only after the user understands it will touch real resources.
 
 ## Resource Workflows
@@ -69,9 +74,16 @@ Retrieve current command help before using these groups:
 | Vectorize | `npx wrangler vectorize --help` |
 | Hyperdrive | `npx wrangler hyperdrive --help` |
 | Workflows | `npx wrangler workflows --help` |
+| Browser Run sessions | `npx wrangler browser --help` |
+| AI Search | `npx wrangler ai-search --help` |
+| Workers VPC | `npx wrangler vpc --help` |
+| mTLS certificates | `npx wrangler mtls-certificate --help` |
+| Artifacts | `npx wrangler artifacts --help` |
+| Agent Memory namespaces | `npx wrangler agent-memory --help` |
 | Secrets Store | `npx wrangler secrets-store --help` |
 | Pages | `npx wrangler pages --help` |
 | Containers | Check current Containers docs and Wrangler help; commands and limits change quickly. |
+| Dynamic Workers / Worker Loaders | Check current Dynamic Workers docs plus config schema; this is primarily `worker_loaders` config, not a resource command group. |
 
 Prefer Wrangler-managed resource creation when the user wants local reproducibility or generated config. Prefer Dashboard/API inspection when the task is audit-only.
 
@@ -99,8 +111,11 @@ Skip unavailable commands with a short note. If validation fails because a comma
 ## Gotchas
 
 - `wrangler dev` uses local simulations by default for many bindings; remote resources require explicit remote configuration.
+- Browser Run Quick Actions through the Worker binding require remote mode in local development and a current compatibility date.
 - Workers AI and some platform services may require remote mode or deployed testing.
 - `.dev.vars` is for local development; it is not deployed as production secrets.
 - `--env` changes names, bindings, and variables according to the config environment. Inspect the config before using it.
+- `wrangler deploy --temporary` is for unauthenticated agent/prototype deploys, not production or CI. Claim URLs are sensitive and expire if not used.
+- `--temporary` is not a global flag and only supports a subset of products. Retrieve claim deployment docs before using advanced bindings.
 - Deleting Workers, resources, namespaces, buckets, databases, or secrets is destructive. Confirm the exact target first.
 - If a repo pins Wrangler, use the pinned version unless the task is explicitly to upgrade it.

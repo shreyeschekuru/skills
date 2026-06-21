@@ -25,9 +25,10 @@ When this command is invoked:
    - For webhooks/push: `webhooks-push.md`
    - For approval flows: `human-in-the-loop.md`
    - For voice: `voice.md`
-   - For browser tools: `browse-the-web.md`
+   - For browser tools: `browse-the-web.md` and `skills/browser-run/SKILL.md`
+   - For Code Mode or Worker Loader execution: `codemode.md` and `skills/dynamic-workers/SKILL.md`
    - For higher-level chat: `think.md`
-3. Fetch the relevant pages from https://developers.cloudflare.com/agents/ for the latest API details
+3. Fetch the relevant pages from https://developers.cloudflare.com/agents/ for the latest API details; also fetch Browser Run or Dynamic Workers docs when those products are involved
 4. Always start with `skills/agents-sdk/references/configuration.md` and `skills/agents-sdk/references/routing.md` for project setup
 
 ## Scaffold Steps

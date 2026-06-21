@@ -56,10 +56,13 @@ Skills are contextual and auto-loaded based on your conversation. When a request
 |-------|------------|
 | cloudflare | Retrieval-first platform router for broad Cloudflare tasks, product selection, current docs, MCP tools, and focused skills |
 | agents-sdk | Building stateful AI agents with state, scheduling, RPC, MCP servers, email, and streaming chat |
+| browser-run | Browser automation on Cloudflare with screenshots, PDFs, crawlers, CDP, Playwright, Puppeteer, Live View, and WebMCP |
 | cloudflare-email-service | Transactional email sending, Email Routing, Workers email bindings, REST email API, and deliverability |
+| dynamic-workers | Runtime-loaded Workers, Worker Loader bindings, generated-code execution, egress control, and dynamic sandboxing |
 | durable-objects | Stateful coordination (chat rooms, games, booking), RPC, SQLite, alarms, WebSockets |
 | sandbox-sdk | Secure code execution for AI code execution, code interpreters, CI/CD systems, and interactive dev environments |
-| wrangler | Deploying and managing Workers, KV, R2, D1, Vectorize, Queues, Workflows |
+| workflows | Durable multi-step Workers applications with retries, sleeps, events, rollback, and instance management |
+| wrangler | Deploying and managing Workers, KV, R2, D1, Vectorize, Queues, Workflows, Browser Run, AI Search, and related resources |
 | web-perf | Auditing Core Web Vitals (FCP, LCP, TBT, CLS), render-blocking resources, network chains |
 | workers-best-practices | Reviewing and authoring production Workers code, bindings, generated types, streaming, secrets, and observability |
 | turnstile-spin | End-to-end Turnstile setup, CAPTCHA migration, managed siteverify Worker deployment, snippets, and validation |

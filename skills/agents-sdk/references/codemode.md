@@ -10,9 +10,9 @@
 - Limitations
 
 
-Fetch https://developers.cloudflare.com/agents/model-context-protocol/protocol/codemode/ for complete documentation.
+Fetch https://developers.cloudflare.com/agents/model-context-protocol/protocol/codemode/ and https://developers.cloudflare.com/dynamic-workers/ for complete documentation.
 
-Codemode lets LLMs write and execute code that orchestrates your tools, instead of calling them one at a time. The LLM gets a single "write code" tool; generated JavaScript runs in an isolated Worker sandbox.
+Codemode lets LLMs write and execute code that orchestrates your tools, instead of calling them one at a time. The LLM gets a single "write code" tool; generated JavaScript runs in a Worker Loader-backed Dynamic Worker sandbox.
 
 ## Fit
 
@@ -34,6 +34,8 @@ Codemode lets LLMs write and execute code that orchestrates your tools, instead 
   "compatibility_flags": ["nodejs_compat"]
 }
 ```
+
+Load `dynamic-workers` when the task involves raw Worker Loader APIs, custom sandbox bindings, egress control, Tail Worker logging, Dynamic Workflows, or Durable Object facets.
 
 ### Install
 
@@ -98,7 +100,7 @@ const codemode = createCodeTool({
 
 1. `createCodeTool` generates TypeScript type definitions from your tools
 2. The LLM writes an async arrow function calling `codemode.toolName(args)`
-3. Code runs in an isolated Worker sandbox via `DynamicWorkerExecutor`
+3. Code runs in a Dynamic Worker sandbox via `DynamicWorkerExecutor`
 4. Tool calls route back to the host via Workers RPC
 5. External `fetch()` is blocked by default — sandbox can only call your tools
 
@@ -107,10 +109,12 @@ const codemode = createCodeTool({
 ```typescript
 const executor = new DynamicWorkerExecutor({
   loader: env.LOADER,
-  globalOutbound: null           // default — fully isolated
+  globalOutbound: null           // isolate generated code from the public network
   // globalOutbound: env.MY_SERVICE  // route through a Fetcher
 });
 ```
+
+Raw Dynamic Workers inherit parent network access when `globalOutbound` is omitted. Code Mode executors should be configured so generated code can only use the tools or gateways you intentionally expose.
 
 ## Limitations
 
@@ -118,3 +122,4 @@ const executor = new DynamicWorkerExecutor({
 - `needsApproval` tools execute immediately in sandbox (no approval pause yet)
 - JavaScript execution only
 - Requires `worker_loaders` binding
+- Generated code still needs input/output bounds, logging, and safe tool descriptions

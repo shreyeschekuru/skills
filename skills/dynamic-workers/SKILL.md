@@ -1,6 +1,6 @@
 ---
 name: dynamic-workers
-description: Build and review Cloudflare Dynamic Workers and Worker Loader integrations. Load when a task involves runtime-loaded Workers, AI-generated or untrusted code execution, Code Mode, worker_loaders bindings, dynamic workflows, custom sandbox bindings, egress control, Tail Worker observability, or Durable Object facets. Retrieve current Cloudflare docs before exact APIs, limits, pricing, or beta status.
+description: "Build and review Cloudflare Dynamic Workers and Worker Loader integrations. Load when a task involves runtime-loaded Workers, AI-generated or untrusted code execution, Code Mode, worker_loaders bindings, dynamic workflows, custom sandbox bindings, egress control, Tail Worker observability, or Durable Object facets. Retrieve current Cloudflare docs before exact APIs, limits, pricing, or beta status."
 ---
 
 # Cloudflare Dynamic Workers

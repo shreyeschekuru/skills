@@ -1,6 +1,6 @@
 ---
 name: workflows
-description: Build and review Cloudflare Workflows. Load for durable multi-step Worker applications, WorkflowEntrypoint classes, workflow bindings, retries, sleeps, waitForEvent, rollback, idempotent step design, instance management, Python Workflows, dynamic workflows, or Wrangler workflow commands. Retrieve current Cloudflare docs before exact APIs, limits, pricing, or compatibility dates.
+description: "Build and review Cloudflare Workflows. Load for durable multi-step Worker applications, WorkflowEntrypoint classes, workflow bindings, retries, sleeps, waitForEvent, rollback, idempotent step design, instance management, Python Workflows, dynamic workflows, or Wrangler workflow commands. Retrieve current Cloudflare docs before exact APIs, limits, pricing, or compatibility dates."
 ---
 
 # Cloudflare Workflows

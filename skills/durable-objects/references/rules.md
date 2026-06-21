@@ -51,7 +51,14 @@ Influence DO creation location for latency-sensitive apps:
 const id = env.GAME.idFromName(gameId, { locationHint: "wnam" });
 ```
 
-Available hints: `wnam`, `enam`, `sam`, `weur`, `eeur`, `apac`, `oc`, `afr`, `me`.
+Available hints include `wnam`, `enam`, `sam`, `weur`, `eeur`, `apac`, `apac-ne`, `apac-se`, `oc`, `afr`, and `me`. Retrieve current docs before relying on the list.
+
+Use hints sparingly:
+
+- Default placement is usually best because Cloudflare creates the object close to the initializing request.
+- Hints are best-effort and do not guarantee an exact city or region.
+- Use `apac-ne` or `apac-se` only when traffic is clearly concentrated in Northeast or Southeast Asia-Pacific; use `apac` for broader Asia-Pacific audiences.
+- Location hints influence creation. They are not a live migration tool for existing objects.
 
 ## Storage
 
@@ -287,6 +294,14 @@ async webSocketClose(ws: WebSocket, code: number, reason: string) {
 // Broadcast
 getWebSockets().forEach(ws => ws.send(JSON.stringify(payload)));
 ```
+
+### Outbound Connection Keepalive
+
+Active outbound TCP sockets created with `connect()` and outbound WebSockets can keep a Durable Object alive while the connection is active. This matters for agents streaming LLM tokens or long-running tasks over outbound connections.
+
+- Once all outbound connections close, normal inactivity eviction rules resume.
+- Current docs place a maximum duration on how long each outbound connection prevents eviction; retrieve lifecycle docs or the changelog before designing long streams.
+- Do not store critical state only in memory just because an outbound connection is active.
 
 ## Error Handling
 

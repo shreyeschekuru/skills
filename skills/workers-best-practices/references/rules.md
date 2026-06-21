@@ -27,18 +27,17 @@ Set `compatibility_date` to today on new projects. Update periodically on existi
 ```jsonc
 // wrangler.jsonc
 {
-  "compatibility_date": "$today",  // Replace with today's date (YYYY-MM-DD)
-  "compatibility_flags": ["nodejs_compat"]
+  "compatibility_date": "$today"  // Replace with today's date (YYYY-MM-DD)
 }
 ```
 
 **Retrieve**: current compatibility dates at `/workers/configuration/compatibility-dates/`.
 
-### Enable nodejs_compat
+### Add nodejs_compat only when needed
 
-The `nodejs_compat` flag enables Node.js built-in modules (`node:crypto`, `node:buffer`, `node:stream`). Many libraries require it. Missing this flag causes cryptic import errors at runtime.
+The `nodejs_compat` flag enables Node.js built-in modules (`node:crypto`, `node:buffer`, `node:stream`). Many libraries require it, but Workers-native APIs are preferred when they meet the need.
 
-**Check**: `compatibility_flags` includes `"nodejs_compat"`.
+**Check**: If code or dependencies import Node.js built-ins, `compatibility_flags` includes `"nodejs_compat"`. Do not flag its absence in a Worker that uses only Workers-native APIs.
 
 ```jsonc
 {
@@ -246,6 +245,29 @@ const auth = await env.AUTH_SERVICE.verifyToken(token);
 
 **Retrieve**: verify `WorkerEntrypoint` import path and signature against latest `@cloudflare/workers-types`.
 
+Deployment and lifecycle checks:
+
+- Deploy the callee Worker before the caller depends on it.
+- Make service API changes backward-compatible across rolling deploys.
+- Await service binding calls or pass their promises to `ctx.waitUntil()`; otherwise the callee can terminate early.
+- Service binding calls count against subrequest and Worker invocation limits; retrieve current limits before fanout-heavy designs.
+
+### Use the Rate Limiting binding for in-code limits
+
+Use the Rate Limiting binding when limits depend on application code paths, users, tenants, API keys, or route-specific logic after the Worker starts. Use WAF rate limiting rules when traffic should be limited before Worker execution.
+
+**Check**: custom KV/D1/DO counters used only for simple per-user/tenant/route throttling should be compared against the Rate Limiting binding.
+
+```ts
+const key = `${tenantId}:${routeId}`;
+const { success } = await env.API_RATE_LIMIT.limit({ key });
+if (!success) {
+  return Response.json({ error: "rate limited" }, { status: 429 });
+}
+```
+
+**Retrieve**: `/workers/runtime-apis/bindings/rate-limit/` for current config shape and locality/accuracy behavior.
+
 ### Use Hyperdrive for external database connections
 
 Hyperdrive maintains a regional connection pool, eliminating per-request TCP + TLS + auth cost (often 300-500ms). Create a new `Client` per request — Hyperdrive manages the underlying pool. Requires `nodejs_compat`.
@@ -339,6 +361,41 @@ export default {
   },
 };
 ```
+
+### Do not cache binding-derived clients in global scope
+
+Binding-only deploys may reuse existing isolates. A client created from `env.API_KEY`, a Secrets Store value, or another binding derivative at module scope can keep stale credentials after the binding changes.
+
+**Check**: API/database clients in global scope that are initialized from secrets, environment variables, or bindings.
+
+```ts
+export default {
+  async fetch(request: Request, env: Env): Promise<Response> {
+    const client = new Client(env.API_KEY);
+    return client.handle(request);
+  },
+} satisfies ExportedHandler<Env>;
+```
+
+Anti-pattern:
+```ts
+let client: Client | undefined;
+
+export default {
+  async fetch(request: Request, env: Env): Promise<Response> {
+    client ??= new Client(env.API_KEY);
+    return client.handle(request);
+  },
+};
+```
+
+### Use Version Metadata for deployment-aware telemetry
+
+Use the Version Metadata binding when logs, Analytics Engine events, or third-party metrics need to include the Worker version ID, tag, or timestamp.
+
+**Check**: gradual deployments or versioned rollouts that lack a way to correlate errors and metrics with deployed versions.
+
+**Retrieve**: `/workers/runtime-apis/bindings/version-metadata/` for the current binding shape.
 
 ### Always await or waitUntil Promises
 
@@ -448,7 +505,7 @@ async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response
 
 Runs tests inside the Workers runtime with real bindings. Catches issues that Node.js-based tests miss.
 
-**Known pitfall**: the Vitest pool auto-injects `nodejs_compat`, so tests pass even if your wrangler config is missing the flag. Always confirm your `wrangler.jsonc` includes `nodejs_compat` if your code depends on Node.js built-ins.
+**Known pitfall**: the Vitest pool may auto-inject `nodejs_compat`, so tests can pass even if your wrangler config is missing the flag. Confirm your `wrangler.jsonc` includes `nodejs_compat` when your code depends on Node.js built-ins.
 
 **Check**: test setup uses `@cloudflare/vitest-pool-workers`. Tests cover nullable returns (e.g., KV `.get()` returning `null`).
 

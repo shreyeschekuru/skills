@@ -1,6 +1,6 @@
 ---
 name: browser-run
-description: Build and review Cloudflare Browser Run integrations. Load when a task needs real browser automation from Workers or agents: screenshots, PDFs, rendered HTML, Markdown extraction, crawlers, Playwright, Puppeteer, CDP sessions, Stagehand, Quick Actions, Live View, WebMCP, or browser bindings in wrangler config. Retrieve current Cloudflare docs before exact APIs, limits, pricing, or compatibility dates.
+description: "Build and review Cloudflare Browser Run integrations. Load when a task needs real browser automation from Workers or agents: screenshots, PDFs, rendered HTML, Markdown extraction, crawlers, Playwright, Puppeteer, CDP sessions, Stagehand, Quick Actions, Live View, WebMCP, or browser bindings in wrangler config. Retrieve current Cloudflare docs before exact APIs, limits, pricing, or compatibility dates."
 ---
 
 # Cloudflare Browser Run

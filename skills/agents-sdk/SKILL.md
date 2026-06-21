@@ -1,6 +1,6 @@
 ---
 name: agents-sdk
-description: Build AI agents on Cloudflare Workers with the Agents SDK. Load for stateful agents, chat agents, WebSocket apps, scheduled tasks, durable workflows, callable RPC, MCP servers or clients, email, voice, browser automation, queues, retries, observability, or React hooks. Retrieve current Cloudflare docs before exact APIs.
+description: Build AI agents on Cloudflare Workers with the Agents SDK. Load for stateful agents, chat agents, WebSocket apps, scheduled tasks, durable workflows, callable RPC, MCP servers or clients, email, voice, Browser Run automation, Code Mode, queues, retries, observability, or React hooks. Retrieve current Cloudflare docs before exact APIs.
 ---
 
 # Cloudflare Agents SDK
@@ -43,7 +43,8 @@ Cloudflare docs: https://developers.cloudflare.com/agents/
 | Cross-domain auth | [Cross-domain auth](https://developers.cloudflare.com/agents/runtime/operations/cross-domain-authentication/) | WebSocket auth, tokens, CORS |
 | Readonly connections | [Readonly](https://developers.cloudflare.com/agents/runtime/communication/readonly-connections/) | `shouldConnectionBeReadonly` |
 | Voice | [Voice](https://developers.cloudflare.com/agents/communication-channels/voice/) | Experimental STT/TTS, `withVoice` |
-| Browse the web | [Browser tools](https://developers.cloudflare.com/agents/tools/browser/) | Experimental CDP browser automation |
+| Browse the web | [Browser tools](https://developers.cloudflare.com/agents/tools/browser/), [Browser Run](https://developers.cloudflare.com/browser-run/) | Browser Run-backed CDP/browser automation |
+| Code Mode | [Code Mode](https://developers.cloudflare.com/agents/model-context-protocol/protocol/codemode/), [Dynamic Workers](https://developers.cloudflare.com/dynamic-workers/) | Generated code orchestration via Worker Loaders |
 | Think | [Think](https://developers.cloudflare.com/agents/harnesses/think/) | Experimental higher-level chat agent class |
 | Chat/Think upgrades | [Chat agents](https://developers.cloudflare.com/agents/communication-channels/chat/chat-agents/), [Think](https://developers.cloudflare.com/agents/harnesses/think/) | Retrieve current package docs and changelogs before migrating |
 
@@ -67,7 +68,8 @@ The Agents SDK provides:
 - **Push notifications** — Web Push + VAPID delivery from agents
 - **Webhooks** — Receive and verify external webhooks
 - **Voice** (experimental) — STT/TTS via `@cloudflare/voice`
-- **Browser tools** (experimental) — CDP-powered browsing via `agents/browser`
+- **Browser Run tools** — CDP-powered browsing through Browser Run and `agents/browser`
+- **Code Mode** — Generated code orchestration through Worker Loader-backed Dynamic Workers
 - **Think** (experimental) — Higher-level chat agent via `@cloudflare/think`
 
 ## FIRST: Verify Installation
@@ -219,3 +221,5 @@ function App() {
 - **[references/voice.md](references/voice.md)** — `@cloudflare/voice` STT/TTS
 - **[references/codemode.md](references/codemode.md)** — Code Mode for tool orchestration
 - **[references/browse-the-web.md](references/browse-the-web.md)** — CDP browser tools
+
+For browser automation details beyond Agents SDK wiring, load `browser-run`. For Worker Loader, generated-code, or egress-control details, load `dynamic-workers`.
